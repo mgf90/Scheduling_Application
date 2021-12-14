@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="645.0" prefWidth="1171.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainMenuController">
+   <children>
+      <TabPane layoutY="-1.0" prefHeight="645.0" prefWidth="1171.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Customers">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="custTable" prefHeight="512.0" prefWidth="1171.0">
+                          <columns>
+                            <TableColumn fx:id="custIDCol" prefWidth="114.0" text="Customer ID" />
+                            <TableColumn fx:id="custNameCol" prefWidth="198.0" text="Name" />
+                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="277.0" text="Address" />
+                              <TableColumn fx:id="custZipCol" prefWidth="190.0" text="Zip Code" />
+                              <TableColumn fx:id="custPhoneCol" prefWidth="182.0" text="Phone Number" />
+                              <TableColumn fx:id="custDivCol" prefWidth="209.0" text="Division" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="addCustBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddCustomer" text="Add" />
+                        <Button fx:id="deleteCustBtn" layoutX="200.0" layoutY="550.0" mnemonicParsing="false" onAction="#onDeleteCustomer" text="Delete" />
+                        <Button fx:id="updateCustBtn" layoutX="125.0" layoutY="550.0" mnemonicParsing="false" onAction="#onUpdateCustomer" text="Update" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Appointments">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="apptTable" prefHeight="512.0" prefWidth="1171.0">
+                          <columns>
+                            <TableColumn fx:id="apptIDCol" prefWidth="103.0" text="Appointment ID" />
+                            <TableColumn fx:id="apptTitleCol" prefWidth="125.0" text="Title" />
+                              <TableColumn fx:id="apptDescCol" prefWidth="205.0" text="Description" />
+                              <TableColumn fx:id="apptLocCol" prefWidth="186.0" text="Location" />
+                              <TableColumn fx:id="apptStartCol" prefWidth="118.0" text="Start" />
+                              <TableColumn fx:id="apptEndCol" prefWidth="130.0" text="End" />
+                              <TableColumn fx:id="apptContactCol" prefWidth="152.0" text="Contact" />
+                              <TableColumn fx:id="apptCustIDCol" prefWidth="151.0" text="Customer ID" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="deleteApptBtn" layoutX="200.0" layoutY="550.0" mnemonicParsing="false" onAction="#onDeleteAppointment" text="Delete" />
+                        <Button fx:id="updateApptBtn" layoutX="125.0" layoutY="550.0" mnemonicParsing="false" onAction="#onUpdateAppointment" text="Update" />
+                        <Button fx:id="addApptBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddAppointment" text="Add" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <Button fx:id="exitBtn" layoutX="952.0" layoutY="578.0" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="117.0" text="Exit" />
+   </children>
+</AnchorPane>

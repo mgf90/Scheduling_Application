@@ -86,6 +86,8 @@ public class Customer {
 
     public static void selectCustomers() throws SQLException {
 
+        allCustomers.clear();
+
         String sql = "SELECT * FROM customers;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery(sql);
@@ -107,7 +109,7 @@ public class Customer {
         ps.setString(6, cust.getCreatedBy());
         ps.setTimestamp(7, cust.lastUpdate);
         ps.setString(8, cust.updatedBy);
-//        ps.setInt(9, cust.getDivID());
+        ps.setInt(9, cust.getDivID());
         ps.executeUpdate();
 
     }

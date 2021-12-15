@@ -75,10 +75,12 @@ public class AddCustomerController implements Initializable {
         String createdBy = LoginScreenController.correctUser;
         Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
         String updatedBy = LoginScreenController.correctUser;
-        int div = 0;
+        int div = custDivCombo.getSelectionModel().getSelectedItem().getID();
 
         Customer cust = new Customer(id, name, address, zip, phone, created, createdBy, lastUpdate, updatedBy, div);
         Customer.addCustomers(cust);
+
+        Customer.selectCustomers();
 
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));

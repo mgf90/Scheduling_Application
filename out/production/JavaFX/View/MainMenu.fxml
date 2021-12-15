@@ -15,14 +15,14 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="512.0" prefWidth="1171.0">
+                        <TableView fx:id="custTable" prefHeight="512.0" prefWidth="1171.0">
                           <columns>
-                            <TableColumn prefWidth="114.0" text="Customer ID" />
-                            <TableColumn prefWidth="198.0" text="Name" />
-                              <TableColumn minWidth="7.0" prefWidth="277.0" text="Address" />
-                              <TableColumn prefWidth="190.0" text="Zip Code" />
-                              <TableColumn prefWidth="182.0" text="Phone Number" />
-                              <TableColumn prefWidth="209.0" text="Division" />
+                            <TableColumn fx:id="custIDCol" prefWidth="114.0" text="Customer ID" />
+                            <TableColumn fx:id="custNameCol" prefWidth="198.0" text="Name" />
+                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="277.0" text="Address" />
+                              <TableColumn fx:id="custZipCol" prefWidth="190.0" text="Zip Code" />
+                              <TableColumn fx:id="custPhoneCol" prefWidth="182.0" text="Phone Number" />
+                              <TableColumn fx:id="custDivCol" prefWidth="209.0" text="Division" />
                           </columns>
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddCustomer" text="Add" />
@@ -36,16 +36,16 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView prefHeight="512.0" prefWidth="1171.0">
+                        <TableView fx:id="apptTable" prefHeight="512.0" prefWidth="1171.0">
                           <columns>
-                            <TableColumn prefWidth="103.0" text="Appointment ID" />
-                            <TableColumn prefWidth="125.0" text="Title" />
-                              <TableColumn prefWidth="205.0" text="Description" />
-                              <TableColumn prefWidth="186.0" text="Location" />
-                              <TableColumn prefWidth="118.0" text="Start" />
-                              <TableColumn prefWidth="130.0" text="End" />
-                              <TableColumn prefWidth="152.0" text="Contact" />
-                              <TableColumn prefWidth="151.0" text="Customer ID" />
+                            <TableColumn fx:id="apptIDCol" prefWidth="103.0" text="Appointment ID" />
+                            <TableColumn fx:id="apptTitleCol" prefWidth="125.0" text="Title" />
+                              <TableColumn fx:id="apptDescCol" prefWidth="205.0" text="Description" />
+                              <TableColumn fx:id="apptLocCol" prefWidth="186.0" text="Location" />
+                              <TableColumn fx:id="apptStartCol" prefWidth="118.0" text="Start" />
+                              <TableColumn fx:id="apptEndCol" prefWidth="130.0" text="End" />
+                              <TableColumn fx:id="apptContactCol" prefWidth="152.0" text="Contact" />
+                              <TableColumn fx:id="apptCustIDCol" prefWidth="151.0" text="Customer ID" />
                           </columns>
                         </TableView>
                         <Button fx:id="deleteApptBtn" layoutX="200.0" layoutY="550.0" mnemonicParsing="false" onAction="#onDeleteAppointment" text="Delete" />

@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 public class LoginScreenController implements Initializable {
 
     String checkUser, checkPass;
+    public static String correctUser;
+    public static int correctID;
     Locale currentLocale = Locale.getDefault();
     ResourceBundle lang = ResourceBundle.getBundle("Language.Nat", currentLocale);
 
@@ -76,6 +78,9 @@ public class LoginScreenController implements Initializable {
 //                ResultSet rs = ps.executeQuery(sql);
 
                 if (rs.next()) {
+                    this.correctUser = rs.getString("User_Name");
+                    this.correctID = rs.getInt("User_ID");
+
                     Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                     Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
                     stage.setScene(new Scene(scene));

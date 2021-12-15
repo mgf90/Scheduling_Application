@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="450.0" prefWidth="354.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddCustomerController">
    <children>
       <TextField fx:id="custNameTxt" layoutX="126.0" layoutY="60.0" />
@@ -18,7 +17,7 @@
       <Label layoutX="54.0" layoutY="109.0" text="Phone" />
       <Label layoutX="54.0" layoutY="155.0" text="Address" />
       <Label layoutX="54.0" layoutY="204.0" text="Zip Code" />
-      <ComboBox fx:id="custCountryCombo" layoutX="125.0" layoutY="250.0" prefWidth="150.0" />
+      <ComboBox fx:id="custCountryCombo" layoutX="125.0" layoutY="250.0" onAction="#divisionList" prefWidth="150.0" />
       <ComboBox fx:id="custDivCombo" layoutX="126.0" layoutY="299.0" prefWidth="150.0" />
       <Label layoutX="54.0" layoutY="254.0" text="Country" />
       <Label layoutX="55.0" layoutY="303.0" text="Division" />

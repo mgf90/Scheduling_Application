@@ -25,7 +25,7 @@ public class Main extends Application {
 
         DBConnection.openConnection();
         Customer.selectCustomers();
-        Country.getCountries();
+        Country.updateCountries();
         Division.getAllDivisions();
         Connection conn = DBConnection.getConnection();
 

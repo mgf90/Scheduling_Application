@@ -24,6 +24,9 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
 
         DBConnection.openConnection();
+        Customer.selectCustomers();
+        Country.getCountries();
+        Division.getAllDivisions();
         Connection conn = DBConnection.getConnection();
 
 

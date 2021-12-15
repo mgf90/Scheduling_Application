@@ -31,15 +31,6 @@ public class Customer {
     }
 
     public static ObservableList<Customer> getCustomers() throws SQLException {
-
-        String sql = "SELECT * FROM customers;";
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-        ResultSet rs = ps.executeQuery(sql);
-
-        while (rs.next()) {
-            Customer.allCustomers.add(new Customer(rs.getInt("Customer_ID"), rs.getString("Customer_Name"), rs.getString("Address"), rs.getString("Postal_Code"), rs.getString("Phone"), rs.getInt("Division_ID")));
-        }
-
         return allCustomers;
     }
 
@@ -67,14 +58,14 @@ public class Customer {
         return divID;
     }
 
-    public void selectAllCustomers() throws SQLException {
+    public static void selectCustomers() throws SQLException {
 
-        String sql = "SELECT * FROM client_schedule.customers";
-        Statement stmt = DBConnection.getConnection().createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM customers;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery(sql);
 
         while (rs.next()) {
-            allCustomers.add(new Customer(rs.getInt("Customer_ID"), rs.getString("Customer_Name"), rs.getString("Address"), rs.getString("Postal_Code"), rs.getString("Phone"), rs.getInt("Division_ID")));
+            Customer.allCustomers.add(new Customer(rs.getInt("Customer_ID"), rs.getString("Customer_Name"), rs.getString("Address"), rs.getString("Postal_Code"), rs.getString("Phone"), rs.getInt("Division_ID")));
         }
 
     }

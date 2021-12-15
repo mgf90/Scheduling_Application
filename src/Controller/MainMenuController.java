@@ -1,5 +1,6 @@
 package Controller;
 
+import Database.DBConnection;
 import Database.DBQuery;
 import Model.Appointment;
 import Model.Country;
@@ -97,15 +98,6 @@ public class MainMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-
-        try {
-            Country.getCountries();
-            Division.getAllDivisions();
-            Customer.getCustomers();
-        } catch (SQLException e) {
-            System.out.println("SQL error" + e);
-        }
-
         custIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         custNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         custAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -159,5 +151,7 @@ public class MainMenuController implements Initializable {
     @FXML
     void onExit(ActionEvent event) {
 
+        DBConnection.closeConnection();
+        System.exit(0);
     }
 }

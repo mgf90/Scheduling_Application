@@ -12,9 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -22,9 +20,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
+
+    private static Customer modCust;
+    private static int modCustInt;
 
     @FXML
     private TableView<Customer> custTable;
@@ -95,10 +97,16 @@ public class MainMenuController implements Initializable {
     @FXML
     private TableColumn<Appointment, Integer> apptCustIDCol;
 
+    public static Customer getModCust() {
+        return modCust;
+    }
+
+    public static int getModCustInt() {
+        return modCustInt;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-
 
         custIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         custNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -106,8 +114,19 @@ public class MainMenuController implements Initializable {
         custZipCol.setCellValueFactory(new PropertyValueFactory<>("zipCode"));
         custPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
         custDivCol.setCellValueFactory(new PropertyValueFactory<>("divID"));
+
+        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        apptLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        apptCustIDCol.setCellValueFactory(new PropertyValueFactory<>("custID"));
+
         try {
             custTable.setItems(Customer.getCustomers());
+            apptTable.setItems(Appointment.getAllAppointments());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -136,8 +155,27 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    void onDeleteCustomer(ActionEvent event) {
+    void onDeleteCustomer(ActionEvent event) throws SQLException {
 
+        Customer deleteCust = custTable.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete " + deleteCust.getName() + " from the system?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            Customer.deleteCustomer(deleteCust);
+            Customer.selectCustomers();
+            custTable.setItems(Customer.getCustomers());
+
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+            alert2.setTitle("Delete Successful");
+            alert2.setHeaderText(null);
+            alert2.setContentText(deleteCust.getName() + " and their appointments have been deleted from the system");
+
+            alert2.showAndWait();
+        }
     }
 
     @FXML
@@ -146,8 +184,16 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    void onUpdateCustomer(ActionEvent event) {
+    void onUpdateCustomer(ActionEvent event) throws SQLException, IOException {
 
+        modCust = custTable.getSelectionModel().getSelectedItem();
+        modCustInt = Customer.getCustomers().indexOf(modCust);
+
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Parent scene = FXMLLoader.load(getClass().getResource("/View/UpdateCustomer.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+        stage.centerOnScreen();
     }
 
     @FXML

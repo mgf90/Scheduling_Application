@@ -33,6 +33,8 @@ public class Division {
 
     public static ObservableList<Division> getAllDivisions() throws SQLException {
 
+        allDivisions.clear();
+
         String sql = "SELECT * FROM first_level_divisions;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery(sql);
@@ -71,6 +73,18 @@ public class Division {
         return countryID;
     }
 
+    public static Division getDivisionName(int id) {
+
+        int i = 0;
+        while (i < allDivisions.size()) {
+            if (id == allDivisions.get(i).getID())
+                return allDivisions.get(i);
+            i++;
+        }
+
+        return null;
+    }
+
     @Override
     public String toString() {
         return division;
@@ -88,4 +102,6 @@ public class Division {
 
         return div;
     }
+
+
 }

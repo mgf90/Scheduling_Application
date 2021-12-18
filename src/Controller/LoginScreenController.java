@@ -18,6 +18,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -105,7 +106,7 @@ public class LoginScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        locationLbl.setText(currentLocale.getCountry());
+        locationLbl.setText(ZoneId.systemDefault().toString());
         usernameTxt.setPromptText(lang.getString("Username"));
         passwordTxt.setPromptText(lang.getString("Password"));
         logBtn.setText(lang.getString("Login"));

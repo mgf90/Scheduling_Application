@@ -62,7 +62,22 @@ public class Country {
         return this.name;
     }
 
+    public static Country getCountryName(int id) {
+
+        int i = 0;
+        while (i < countries.size()) {
+            if (id == countries.get(i).getId())
+                return countries.get(i);
+            i++;
+        }
+
+        return null;
+    }
+
     public static ObservableList<Country> updateCountries() throws SQLException {
+
+        countries.clear();
+
         String sql = "SELECT * FROM countries;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery(sql);

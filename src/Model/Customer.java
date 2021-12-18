@@ -1,7 +1,6 @@
 package Model;
 
 import Controller.LoginScreenController;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import Database.DBConnection;
@@ -35,9 +34,6 @@ public class Customer {
         this.updatedBy = updatedBy;
         this.divID = divID;
     }
-
-
-
 
 
     public static ObservableList<Customer> getCustomers() throws SQLException {
@@ -84,6 +80,34 @@ public class Customer {
         return divID;
     }
 
+    public static Country getCountry(Customer cust) {
+
+        Division d;
+        Country c;
+
+        if (cust.getDivID() < 55) {
+            d = Division.getDivisionName(54);
+            c = Country.getCountryName(d.getCountryID());
+        } else if (cust.getDivID() < 73) {
+            d = Division.getDivisionName(72);
+            c = Country.getCountryName(d.getCountryID());
+        } else {
+            d = Division.getDivisionName(101);
+            c = Country.getCountryName(d.getCountryID());
+        }
+
+        return c;
+    }
+
+    public static void deleteCustomer(Customer cust) throws SQLException {
+
+        String sql = "DELETE FROM customers WHERE Customer_ID = ?;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setInt(1, cust.getID());
+        ps.executeUpdate();
+
+    }
+
     public static void selectCustomers() throws SQLException {
 
         allCustomers.clear();
@@ -95,6 +119,20 @@ public class Customer {
         while (rs.next()) {
             Customer.allCustomers.add(new Customer(rs.getInt("Customer_ID"), rs.getString("Customer_Name"), rs.getString("Address"), rs.getString("Postal_Code"), rs.getString("Phone"), null, null, null, null, rs.getInt("Division_ID")));
         }
+    }
+
+    public static void updateCustomer(Customer cust) throws SQLException {
+
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setString   (1, cust.getName());
+        ps.setString(2, cust.getAddress());
+        ps.setString(3, cust.getZipCode());
+        ps.setString(4, cust.getPhoneNum());
+        ps.setString(5, LoginScreenController.correctUser);
+        ps.setInt(6, cust.getDivID());
+        ps.setInt(7, cust.getID());
+        ps.executeUpdate();
     }
 
     public static void addCustomers(Customer cust) throws SQLException {
@@ -111,6 +149,5 @@ public class Customer {
         ps.setString(8, cust.updatedBy);
         ps.setInt(9, cust.getDivID());
         ps.executeUpdate();
-
     }
 }

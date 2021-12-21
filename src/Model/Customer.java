@@ -80,6 +80,11 @@ public class Customer {
         return divID;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public static Country getCountry(Customer cust) {
 
         Division d;

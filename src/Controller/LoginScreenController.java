@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,18 +66,30 @@ public class LoginScreenController implements Initializable {
         checkUser = usernameTxt.getText();
         checkPass = passwordTxt.getText();
 
+//        Boolean check = User.verifyUser(checkUser, checkPass);
+//
+//        if (check) {
+//            this.correctUser = checkUser;
+//
+//            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+//            Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
+//            stage.setScene(new Scene(scene));
+//            stage.show();
+//            stage.centerOnScreen();
+//        } else {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle(lang.getString("Login"));
+//            alert.setHeaderText(null);
+//            alert.setContentText(lang.getString("LogInFail"));
+//
+//            alert.showAndWait();
+//        }
+
         try {
             if (checkUser != null && checkPass != null) {
                 String sql = "Select * from users Where User_Name='" + checkUser + "' and Password='" + checkUser + "'";
                 Statement stmt = DBConnection.getConnection().createStatement();
                 ResultSet rs = stmt.executeQuery(sql);
-
-                /** prepared statement keeps saying incorrect pw even when putting in the correct info */
-//                String sql = "Select * from users Where User_Name = '?' AND Password = '?';";
-//                PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-//                ps.setString(1, checkUser);
-//                ps.setString(2, checkPass);
-//                ResultSet rs = ps.executeQuery(sql);
 
                 if (rs.next()) {
                     this.correctUser = rs.getString("User_Name");

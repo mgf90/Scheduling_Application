@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 
 public class Appointment {
 
@@ -19,8 +18,8 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private ZonedDateTime start;
-    private ZonedDateTime end;
+    private Timestamp start;
+    private Timestamp end;
     private Timestamp createdDate;
     private String createdBy;
     private Timestamp lastUpdate;
@@ -29,7 +28,7 @@ public class Appointment {
     private int userID;
     private int contactID;
 
-    public Appointment(int ID, String title, String description, String location, String type, ZonedDateTime start, ZonedDateTime end, Timestamp createdDate, String createdBy, Timestamp lastUpdate, String updatedBy, int custID, int userID, int contactID) {
+    public Appointment(int ID, String title, String description, String location, String type, Timestamp start, Timestamp end, Timestamp createdDate, String createdBy, Timestamp lastUpdate, String updatedBy, int custID, int userID, int contactID) {
         this.ID = ID;
         this.title = title;
         this.description = description;
@@ -45,6 +44,7 @@ public class Appointment {
         this.userID = userID;
         this.contactID = contactID;
     }
+
 
     public static ObservableList<Appointment> getAllAppointments() {
         return allAppointments;
@@ -74,11 +74,11 @@ public class Appointment {
         return custID;
     }
 
-    public ZonedDateTime getStart() {
+    public Timestamp getStart() {
         return start;
     }
 
-    public ZonedDateTime getEnd() {
+    public Timestamp getEnd() {
         return end;
     }
 
@@ -119,7 +119,27 @@ public class Appointment {
         ResultSet rs = ps.executeQuery(sql);
 
         while (rs.next()) {
-            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), null, null, null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
+    }
+
+    public static void addAppointment(Appointment appt) throws SQLException {
+
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setString(1, appt.getTitle());
+        ps.setString(2, appt.getDescription());
+        ps.setString(3, appt.getLocation());
+        ps.setString(4, appt.getType());
+        ps.setTimestamp(5, appt.getStart());
+        ps.setTimestamp(6, appt.getEnd());
+        ps.setTimestamp(7, appt.getCreatedDate());
+        ps.setString(8, appt.getCreatedBy());
+        ps.setTimestamp(9, appt.getLastUpdate());
+        ps.setString(10, appt.getUpdatedBy());
+        ps.setInt(11, appt.getCustID());
+        ps.setInt(12, appt.getUserID());
+        ps.setInt(13, appt.getContactID());
+        ps.executeUpdate();
     }
 }

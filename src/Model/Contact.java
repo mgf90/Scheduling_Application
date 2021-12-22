@@ -39,6 +39,25 @@ public class Contact {
         return name;
     }
 
+    public static Contact getContact(int id) throws SQLException {
+
+        int i = 0;
+        while (i < allContacts.size()) {
+            if (id == allContacts.get(i).getID()) {
+                return allContacts.get(i);
+            }
+            i++;
+        }
+
+        return null;
+//        String sql = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?;";
+//        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+//        ps.setInt(1, conID);
+//        ResultSet rs = ps.executeQuery(sql);
+//        Contact c = rs.getObject(1);
+//        return name;
+    }
+
     public static ObservableList<Contact> getAllContacts() throws SQLException {
 
         allContacts.clear();

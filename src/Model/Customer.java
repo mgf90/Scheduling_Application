@@ -85,6 +85,18 @@ public class Customer {
         return name;
     }
 
+    public static Customer getCustomer(int id) {
+
+        int i = 0;
+        while (i < allCustomers.size()) {
+            if (id == allCustomers.get(i).getID())
+                return allCustomers.get(i);
+            i++;
+        }
+
+        return null;
+    }
+
     public static Country getCountry(Customer cust) {
 
         Division d;

@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.LoginScreenController;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,10 +67,6 @@ public class Appointment {
         return location;
     }
 
-    public int getContact() {
-        return contactID;
-    }
-
     public int getCustID() {
         return custID;
     }
@@ -121,6 +118,27 @@ public class Appointment {
         while (rs.next()) {
             allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
+    }
+
+    public static void updateAppointment(Appointment appt) throws SQLException {
+
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setString(1, appt.getTitle());
+        ps.setString(2, appt.getDescription());
+        ps.setString(3, appt.getLocation());
+        ps.setString(4, appt.getType());
+        ps.setTimestamp(5, appt.getStart());
+        ps.setTimestamp(6, appt.getEnd());
+        ps.setTimestamp(7, appt.getCreatedDate());
+        ps.setString(8, appt.getCreatedBy());
+        ps.setString(9, LoginScreenController.correctUser);
+        ps.setInt(10, appt.getCustID());
+        ps.setInt(11, appt.getUserID());
+        ps.setInt(12, appt.getContactID());
+        ps.setInt(13, appt.getID());
+
+        ps.executeUpdate();
     }
 
     public static void addAppointment(Appointment appt) throws SQLException {

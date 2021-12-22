@@ -28,6 +28,7 @@ public class Main extends Application {
         Country.updateCountries();
         Division.getAllDivisions();
         Appointment.selectAppointments();
+        Contact.getAllContacts();
         Connection conn = DBConnection.getConnection();
 
 

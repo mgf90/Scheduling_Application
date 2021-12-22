@@ -27,6 +27,8 @@ public class MainMenuController implements Initializable {
 
     private static Customer modCust;
     private static int modCustInt;
+    private static Appointment modAppt;
+    private static int modApptInt;
 
     @FXML
     private TableView<Customer> custTable;
@@ -103,6 +105,14 @@ public class MainMenuController implements Initializable {
 
     public static int getModCustInt() {
         return modCustInt;
+    }
+
+    public static Appointment getModAppt() {
+        return modAppt;
+    }
+
+    public static int getModApptInt() {
+        return modApptInt;
     }
 
     @Override
@@ -185,8 +195,16 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    void onUpdateAppointment(ActionEvent event) {
+    void onUpdateAppointment(ActionEvent event) throws IOException {
 
+        modAppt = apptTable.getSelectionModel().getSelectedItem();
+        modApptInt = Appointment.getAllAppointments().indexOf(modAppt);
+
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Parent scene = FXMLLoader.load(getClass().getResource("/View/UpdateAppointment.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+        stage.centerOnScreen();
     }
 
     @FXML

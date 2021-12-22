@@ -107,6 +107,15 @@ public class Appointment {
         return contactID;
     }
 
+    public static void deleteAppointment(Appointment appt) throws SQLException {
+
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setInt(1, appt.getID());
+        ps.executeUpdate();
+
+    }
+
     public static void selectAppointments() throws SQLException {
 
         allAppointments.clear();

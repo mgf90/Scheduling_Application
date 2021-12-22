@@ -6,6 +6,7 @@ import Model.Appointment;
 import Model.Country;
 import Model.Customer;
 import Model.Division;
+import com.mysql.cj.xdevapi.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -166,7 +167,27 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    void onDeleteAppointment(ActionEvent event) {
+    void onDeleteAppointment(ActionEvent event) throws SQLException {
+
+        Appointment deleteAppt = apptTable.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete " + deleteAppt.getTitle() + " from the system?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            Appointment.deleteAppointment(deleteAppt);
+            Appointment.selectAppointments();
+            apptTable.setItems(Appointment.getAllAppointments());
+
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+            alert2.setTitle("Delete Successful");
+            alert2.setHeaderText(null);
+            alert2.setContentText(deleteAppt.getTitle() + " has been deleted from the system");
+
+            alert2.showAndWait();
+        }
 
     }
 

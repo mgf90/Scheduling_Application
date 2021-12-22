@@ -205,6 +205,8 @@ public class MainMenuController implements Initializable {
             Customer.deleteCustomer(deleteCust);
             Customer.selectCustomers();
             custTable.setItems(Customer.getCustomers());
+            Appointment.selectAppointments();
+            apptTable.setItems(Appointment.getAllAppointments());
 
             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
             alert2.setTitle("Delete Successful");

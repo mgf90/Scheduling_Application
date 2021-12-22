@@ -123,6 +123,11 @@ public class Customer {
         ps.setInt(1, cust.getID());
         ps.executeUpdate();
 
+        String sql2 = "DELETE FROM appointments WHERE Customer_ID = ?;";
+        PreparedStatement ps2 = DBConnection.getConnection().prepareStatement(sql2);
+        ps2.setInt(1, cust.getID());
+        ps2.executeUpdate();
+
     }
 
     public static void selectCustomers() throws SQLException {

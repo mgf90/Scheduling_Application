@@ -1,12 +1,8 @@
 package Controller;
 
 import Database.DBConnection;
-import Database.DBQuery;
 import Model.Appointment;
-import Model.Country;
 import Model.Customer;
-import Model.Division;
-import com.mysql.cj.xdevapi.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -53,27 +48,6 @@ public class MainMenuController implements Initializable {
     private TableColumn<Customer, Integer> custDivCol;
 
     @FXML
-    private Button addCustBtn;
-
-    @FXML
-    private Button deleteCustBtn;
-
-    @FXML
-    private Button updateCustBtn;
-
-    @FXML
-    private Button deleteApptBtn;
-
-    @FXML
-    private Button updateApptBtn;
-
-    @FXML
-    private Button addApptBtn;
-
-    @FXML
-    private Button exitBtn;
-
-    @FXML
     private TableView<Appointment> apptTable;
 
     @FXML
@@ -100,22 +74,17 @@ public class MainMenuController implements Initializable {
     @FXML
     private TableColumn<Appointment, Integer> apptCustIDCol;
 
-    public static Customer getModCust() {
-        return modCust;
-    }
-
+    /** @return the index of the selected Customer */
     public static int getModCustInt() {
         return modCustInt;
     }
 
-    public static Appointment getModAppt() {
-        return modAppt;
-    }
-
+    /** @return the index of the selected Appointment */
     public static int getModApptInt() {
         return modApptInt;
     }
 
+    /** Initializes the Main Menu */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -143,7 +112,7 @@ public class MainMenuController implements Initializable {
         }
     }
 
-
+    /** goes to the Add Appointment page */
     @FXML
     void onAddAppointment(ActionEvent event) throws IOException {
 
@@ -155,6 +124,7 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /** goes to the Add Customer page */
     @FXML
     void onAddCustomer(ActionEvent event) throws IOException {
 
@@ -166,6 +136,7 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /** goes to the Delete Appointment page */
     @FXML
     void onDeleteAppointment(ActionEvent event) throws SQLException {
 
@@ -191,6 +162,7 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /** deletes the selected Customer and any associated Appointments */
     @FXML
     void onDeleteCustomer(ActionEvent event) throws SQLException {
 
@@ -217,6 +189,7 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /** goes to the Update Appointment page */
     @FXML
     void onUpdateAppointment(ActionEvent event) throws IOException {
 
@@ -230,6 +203,7 @@ public class MainMenuController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** goes to the Update Customer page */
     @FXML
     void onUpdateCustomer(ActionEvent event) throws SQLException, IOException {
 
@@ -243,6 +217,7 @@ public class MainMenuController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** closes the app and database connection */
     @FXML
     void onExit(ActionEvent event) {
 

@@ -15,7 +15,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -25,6 +27,8 @@ public class MainMenuController implements Initializable {
     private static int modCustInt;
     private static Appointment modAppt;
     private static int modApptInt;
+    public static ZonedDateTime startView;
+    public static ZonedDateTime endView;
 
     @FXML
     private TableView<Customer> custTable;
@@ -74,6 +78,18 @@ public class MainMenuController implements Initializable {
     @FXML
     private TableColumn<Appointment, Integer> apptCustIDCol;
 
+    @FXML
+    private RadioButton weekView;
+
+    @FXML
+    private RadioButton monthView;
+
+    @FXML
+    private ToggleGroup ViewWeekMonth;
+
+    @FXML
+    private Label viewLabel;
+
     /** @return the index of the selected Customer */
     public static int getModCustInt() {
         return modCustInt;
@@ -103,6 +119,7 @@ public class MainMenuController implements Initializable {
         apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         apptCustIDCol.setCellValueFactory(new PropertyValueFactory<>("custID"));
+        weekView.fire();
 
         try {
             custTable.setItems(Customer.getCustomers());
@@ -110,6 +127,7 @@ public class MainMenuController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     /** goes to the Add Appointment page */
@@ -215,6 +233,34 @@ public class MainMenuController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
         stage.centerOnScreen();
+    }
+
+    @FXML
+    void weekMonthToggle(ActionEvent event) {
+
+        if (ViewWeekMonth.getSelectedToggle().equals(weekView)) {
+            startView = ZonedDateTime.now().withHour(0).withMinute(0);
+            endView = startView.plusWeeks(1).withHour(23).withMinute(59);
+        }
+
+        if (ViewWeekMonth.getSelectedToggle().equals(monthView)) {
+            startView = ZonedDateTime.now().withHour(0).withMinute(0);
+            endView = startView.plusMonths(1).withHour(23).withMinute(59);
+        }
+
+        String start = startView.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String end = endView.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        viewLabel.setText(start + " - " + end);
+
+        start = startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
+        end = endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+        try {
+            Appointment.selectAppointments(start, end);
+        }
+        catch(SQLException e) {
+            System.out.println("SQL Error!!! " + e);
+        }
     }
 
     /** closes the app and database connection */

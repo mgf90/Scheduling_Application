@@ -42,14 +42,16 @@
                      <children>
                         <TableView fx:id="apptTable" prefHeight="512.0" prefWidth="1171.0">
                           <columns>
-                            <TableColumn fx:id="apptIDCol" prefWidth="103.0" text="Appointment ID" />
-                            <TableColumn fx:id="apptTitleCol" prefWidth="125.0" text="Title" />
-                              <TableColumn fx:id="apptDescCol" prefWidth="205.0" text="Description" />
-                              <TableColumn fx:id="apptLocCol" prefWidth="186.0" text="Location" />
-                              <TableColumn fx:id="apptStartCol" prefWidth="118.0" text="Start" />
-                              <TableColumn fx:id="apptEndCol" prefWidth="130.0" text="End" />
-                              <TableColumn fx:id="apptContactCol" prefWidth="152.0" text="Contact" />
-                              <TableColumn fx:id="apptCustIDCol" prefWidth="151.0" text="Customer ID" />
+                            <TableColumn fx:id="apptIDCol" prefWidth="96.0" text="Appointment ID" />
+                            <TableColumn fx:id="apptTitleCol" prefWidth="92.0" text="Title" />
+                              <TableColumn fx:id="apptDescCol" prefWidth="88.0" text="Description" />
+                              <TableColumn fx:id="apptTypeCol" prefWidth="90.0" text="Type" />
+                              <TableColumn fx:id="apptLocCol" minWidth="0.0" prefWidth="136.0" text="Location" />
+                              <TableColumn fx:id="apptStartCol" prefWidth="164.0" text="Start" />
+                              <TableColumn fx:id="apptEndCol" prefWidth="171.0" text="End" />
+                              <TableColumn fx:id="apptContactCol" minWidth="0.0" prefWidth="155.0" text="Contact" />
+                              <TableColumn fx:id="apptCustIDCol" prefWidth="98.0" text="Customer ID" />
+                              <TableColumn fx:id="apptUserIDCol" text="User ID" />
                           </columns>
                         </TableView>
                         <Button fx:id="deleteApptBtn" layoutX="200.0" layoutY="550.0" mnemonicParsing="false" onAction="#onDeleteAppointment" text="Delete" />
@@ -66,7 +68,12 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="viewLabel" layoutX="688.0" layoutY="553.0" text="Label">
+                        <Label fx:id="viewLabel" layoutX="688.0" layoutY="553.0" text="All Appointments">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="579.0" layoutY="553.0" text="Selected Range:">
                            <font>
                               <Font size="14.0" />
                            </font>

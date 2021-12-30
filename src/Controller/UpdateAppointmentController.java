@@ -11,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -122,37 +119,58 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     void onSave(ActionEvent event) throws ParseException, SQLException, IOException {
 
-        int id = Integer.parseInt(apptIDTxt.getText());
-        String title = apptTitleTxt.getText();
-        String description = apptDescTxt.getText();
-        String location = apptLocTxt.getText();
-        String type = apptTypeTxt.getText();
+        if (apptStartHourCombo.getValue() < 8 || apptStartHourCombo.getValue() >= 22 || apptEndHourCombo.getValue() >= 22) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please set your appointment between 8am and 10pm");
 
-        String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
-        String endString = apptEndDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
+            alert.showAndWait();
 
-        var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
-        var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);
-        Timestamp start = new Timestamp(date1.getTime());
-        Timestamp end = new Timestamp(date2.getTime());
+        } else {
+            int id = Integer.parseInt(apptIDTxt.getText());
+            String title = apptTitleTxt.getText();
+            String description = apptDescTxt.getText();
+            String location = apptLocTxt.getText();
+            String type = apptTypeTxt.getText();
 
-        Timestamp createdDate = new Timestamp(System.currentTimeMillis());
-        String createdBy = LoginScreenController.correctUser;
-        Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
-        String updatedBy = LoginScreenController.correctUser;
-        int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
-        int userID = LoginScreenController.correctID;
-        int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
+            String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
+            String endString = apptEndDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
 
-        Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
-        Appointment.updateAppointment(appt);
-        Appointment.selectAppointments();
+            var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
+            var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);
+            Timestamp start = new Timestamp(date1.getTime());
+            Timestamp end = new Timestamp(date2.getTime());
 
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
-        stage.setScene(new Scene(scene));
-        stage.show();
-        stage.centerOnScreen();
+            Timestamp createdDate = new Timestamp(System.currentTimeMillis());
+            String createdBy = LoginScreenController.correctUser;
+            Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
+            String updatedBy = LoginScreenController.correctUser;
+            int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
+            int userID = LoginScreenController.correctID;
+            int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
 
+            Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
+
+            if (Appointment.invalidAppointment(appt)) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Customer already has an appointment at this time");
+
+                alert.showAndWait();
+
+            } else {
+                Appointment.updateAppointment(appt);
+                Appointment.selectAppointments();
+
+                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
+                stage.setScene(new Scene(scene));
+                stage.show();
+                stage.centerOnScreen();
+            }
+        }
     }
 }

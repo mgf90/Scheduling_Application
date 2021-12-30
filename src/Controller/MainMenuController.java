@@ -64,6 +64,9 @@ public class MainMenuController implements Initializable {
     private TableColumn<Appointment, String> apptDescCol;
 
     @FXML
+    private TableColumn<Appointment, String> apptTypeCol;
+
+    @FXML
     private TableColumn<Appointment, String> apptLocCol;
 
     @FXML
@@ -77,6 +80,9 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private TableColumn<Appointment, Integer> apptCustIDCol;
+
+    @FXML
+    private TableColumn<Appointment, Integer> apptUserIDCol;
 
     @FXML
     private RadioButton weekView;
@@ -114,12 +120,13 @@ public class MainMenuController implements Initializable {
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         apptLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         apptCustIDCol.setCellValueFactory(new PropertyValueFactory<>("custID"));
-        weekView.fire();
+        apptUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
         try {
             custTable.setItems(Customer.getCustomers());

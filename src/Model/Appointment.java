@@ -184,4 +184,18 @@ public class Appointment {
         ps.setInt(13, appt.getContactID());
         ps.executeUpdate();
     }
+
+    public static Boolean invalidAppointment(Appointment appt) throws SQLException {
+
+        String sql = "SELECT * FROM appointments WHERE Customer_ID = ? AND ((Start BETWEEN ? AND ?) OR (End BETWEEN ? AND ?));";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setInt(1, appt.getCustID());
+        ps.setTimestamp(2, appt.getStart());
+        ps.setTimestamp(3, appt.getEnd());
+        ps.setTimestamp(4, appt.getStart());
+        ps.setTimestamp(5, appt.getEnd());
+        ResultSet rs = ps.executeQuery();
+
+        return rs.next();
+    }
 }

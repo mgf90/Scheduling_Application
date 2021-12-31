@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import Database.DBConnection;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -77,6 +78,8 @@ public class LoginScreenController implements Initializable {
 
         checkUser = usernameTxt.getText();
         checkPass = passwordTxt.getText();
+
+        FileWriter fw = new FileWriter("src\\login_activity.txt");
 
 //        Boolean check = User.verifyUser(checkUser, checkPass);
 //

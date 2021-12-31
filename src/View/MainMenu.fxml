@@ -84,6 +84,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button fx:id="exitBtn" layoutX="952.0" layoutY="578.0" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="117.0" text="Exit" />
+      <Button fx:id="exitBtn" layoutX="1000.0" layoutY="578.0" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="117.0" text="Exit" />
+      <Button layoutX="920.0" layoutY="578.0" mnemonicParsing="false" onAction="#onReport" text="Reports" />
    </children>
 </AnchorPane>

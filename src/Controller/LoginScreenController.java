@@ -15,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import Database.DBConnection;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -78,8 +80,18 @@ public class LoginScreenController implements Initializable {
 
         checkUser = usernameTxt.getText();
         checkPass = passwordTxt.getText();
+        String path = "D:\\Programming\\Java\\Scheduling Application\\src\\";
+        String fName = "login_activity.txt";
 
-        FileWriter fw = new FileWriter("src\\login_activity.txt");
+        File f1 = new File(path, fName);
+        FileWriter fw;
+        if(!f1.exists()) {
+            f1.createNewFile();
+            fw = new FileWriter(f1);
+        } else {
+            fw = new FileWriter(f1, true);
+        }
+//        BufferedWriter bw = new BufferedWriter(fw);
 
 //        Boolean check = User.verifyUser(checkUser, checkPass);
 //
@@ -110,6 +122,8 @@ public class LoginScreenController implements Initializable {
                     this.correctUser = rs.getString("User_Name");
                     correctID = rs.getInt("User_ID");
                     logInTime = ZonedDateTime.now();
+                    fw.write("User Name: " + correctUser + " || Date: " + logInTime + " LOGIN SUCCESSFUL\n");
+                    fw.close();
 
                     ZonedDateTime endView = logInTime.plusMinutes(15);
 
@@ -139,6 +153,9 @@ public class LoginScreenController implements Initializable {
                     stage.show();
                     stage.centerOnScreen();
                 } else {
+                    fw.write("User Name: " + checkUser + " || Date: " + ZonedDateTime.now() + " INVALID LOGIN ATTEMPT\n");
+                    fw.close();
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(lang.getString("Login"));
                     alert.setHeaderText(null);

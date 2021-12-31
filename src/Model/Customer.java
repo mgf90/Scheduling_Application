@@ -22,6 +22,7 @@ public class Customer {
     private String updatedBy;
     private int divID;
 
+    /** constructs Customer object */
     public Customer(int ID, String name, String address, String zipCode, String phoneNum, Timestamp createdTime, String createdBy, Timestamp lastUpdate, String updatedBy, int divID) {
         this.ID = ID;
         this.name = name;
@@ -35,47 +36,53 @@ public class Customer {
         this.divID = divID;
     }
 
-
+    /** @throws SQLException
+     * @return list of all customers */
     public static ObservableList<Customer> getCustomers() throws SQLException {
         return allCustomers;
     }
 
+    /** @return customer ID */
     public int getID() {
         return ID;
     }
 
+    /** @return customer name */
     public String getName() {
         return name;
     }
 
+    /** @return address */
     public String getAddress() {
         return address;
     }
 
+    /** @return zipcode */
     public String getZipCode() {
         return zipCode;
     }
 
+    /** @return phone number */
     public String getPhoneNum() {
         return phoneNum;
     }
 
-    public Timestamp getCreatedTime() {
-        return createdTime;
-    }
-
+    /** @return user who created customer */
     public String getCreatedBy() {
         return createdBy;
     }
 
+    /** @return time of last update */
     public Timestamp getLastUpdate() {
         return lastUpdate;
     }
 
+    /** @return user who last updated */
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    /** @return division ID */
     public int getDivID() {
         return divID;
     }
@@ -85,6 +92,8 @@ public class Customer {
         return name;
     }
 
+    /** @return customer by id
+     * @param id */
     public static Customer getCustomer(int id) {
 
         int i = 0;
@@ -97,6 +106,8 @@ public class Customer {
         return null;
     }
 
+    /** @return country by associated customer
+     * @param cust */
     public static Country getCountry(Customer cust) {
 
         Division d;
@@ -116,6 +127,8 @@ public class Customer {
         return c;
     }
 
+    /** @throws SQLException
+     * @param cust deletes particular customer */
     public static void deleteCustomer(Customer cust) throws SQLException {
 
         String sql = "DELETE FROM customers WHERE Customer_ID = ?;";
@@ -130,6 +143,8 @@ public class Customer {
 
     }
 
+    /** @throws SQLException
+     * selects all customers from the database */
     public static void selectCustomers() throws SQLException {
 
         allCustomers.clear();
@@ -143,6 +158,8 @@ public class Customer {
         }
     }
 
+    /** @throws SQLException
+     * @param cust updates customer in database */
     public static void updateCustomer(Customer cust) throws SQLException {
 
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = NOW(), Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?;";
@@ -157,6 +174,8 @@ public class Customer {
         ps.executeUpdate();
     }
 
+    /** @throws SQLException
+     * @param cust adds particular customer to database */
     public static void addCustomers(Customer cust) throws SQLException {
 
         String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";

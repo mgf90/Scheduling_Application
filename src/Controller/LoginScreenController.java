@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.Appointment;
-import Model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import Database.DBConnection;
-
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,14 +57,17 @@ public class LoginScreenController implements Initializable {
     @FXML
     private Label titleLbl;
 
+    /** @return the login time */
     public static ZonedDateTime getLogInTime() {
         return logInTime;
     }
 
+    /** @return the correct ID */
     public static int getCorrectID() {
         return correctID;
     }
 
+    /** exits the program */
     @FXML
     void onExit(ActionEvent event) {
 
@@ -75,6 +75,10 @@ public class LoginScreenController implements Initializable {
         System.exit(0);
     }
 
+    /** @throws IOException
+     * Checks to see if the username and password are correct
+     * If they are, it continues to the Main Menu
+     * If not, it displays an error message */
     @FXML
     void onLogIn(ActionEvent event) throws IOException, SQLException {
 
@@ -171,6 +175,7 @@ public class LoginScreenController implements Initializable {
         }
     }
 
+    /** initializes the Login screen */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 

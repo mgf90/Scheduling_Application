@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -64,6 +63,7 @@ public class AddAppointmentController implements Initializable {
     @FXML
     private ComboBox<Integer> apptEndMinCombo;
 
+    /** initializes the Add Appointment screen */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -85,6 +85,8 @@ public class AddAppointmentController implements Initializable {
         }
     }
 
+    /** @throws IOException
+     * exits the screen without saving the appointment */
     @FXML
     void onCancel(ActionEvent event) throws IOException {
 
@@ -96,6 +98,10 @@ public class AddAppointmentController implements Initializable {
 
     }
 
+    /** @throws SQLException
+     * @throws ParseException
+     * @throws IOException
+     * Saves the appointment and returns to the Main Menu */
     @FXML
     void onSave(ActionEvent event) throws SQLException, ParseException, IOException {
 

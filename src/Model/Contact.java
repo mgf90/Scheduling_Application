@@ -16,29 +16,37 @@ public class Contact {
     private String name;
     private String email;
 
+    /** constructs Contact object */
     public Contact(int ID, String name, String email) {
         this.ID = ID;
         this.name = name;
         this.email = email;
     }
 
+    /** @return contact ID */
     public int getID() {
         return ID;
     }
 
+    /** @return contact name */
     public String getName() {
         return name;
     }
 
+    /** @return email */
     public String getEmail() {
         return email;
     }
 
+    /** returns contacts as a string */
     @Override
     public String toString() {
         return name;
     }
 
+    /** @throws SQLException
+     * @return contacts
+     * @param id */
     public static Contact getContact(int id) throws SQLException {
 
         int i = 0;
@@ -58,6 +66,8 @@ public class Contact {
 //        return name;
     }
 
+    /** @throws SQLException
+     * @return list of all contacts */
     public static ObservableList<Contact> getAllContacts() throws SQLException {
 
         allContacts.clear();

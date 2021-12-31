@@ -48,6 +48,8 @@ public class ReportsController implements Initializable {
     @FXML
     private Pane clearInfo4;
 
+    /** displays the current report type selected
+     * @throws SQLException*/
     @FXML
     void runReport(ActionEvent event) throws SQLException {
 
@@ -69,6 +71,7 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /** exits to the Main Menu */
     @FXML
     void onExit(ActionEvent event) throws IOException {
 
@@ -79,6 +82,8 @@ public class ReportsController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** initializes the Reports screen
+     * uses two different lambda expression to display and erase report info on mouse hover */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -68,6 +67,7 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     private TextField apptIDTxt;
 
+    /** initializes the Update Appointment screen */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -105,6 +105,8 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
+    /** @throws IOException
+     * returns to the Main Menu screen without saving */
     @FXML
     void onCancel(ActionEvent event) throws IOException {
 
@@ -116,6 +118,10 @@ public class UpdateAppointmentController implements Initializable {
 
     }
 
+    /** @throws ParseException
+     * @throws SQLException
+     * @throws IOException
+     * saves the appointment and returns to the Main Menu */
     @FXML
     void onSave(ActionEvent event) throws ParseException, SQLException, IOException {
 

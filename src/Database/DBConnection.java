@@ -15,6 +15,7 @@ public class DBConnection {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /** opens up a connection to the MySQL database */
     public static void openConnection()
     {
         try {
@@ -28,6 +29,7 @@ public class DBConnection {
         }
     }
 
+    /** closes connection to the MySQL database */
     public static void closeConnection() {
         try {
             connection.close();
@@ -39,6 +41,7 @@ public class DBConnection {
         }
     }
 
+    /** @return connection */
     public static Connection getConnection() {
         return connection;
     }

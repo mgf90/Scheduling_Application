@@ -44,14 +44,9 @@ public class UpdateCustomerController implements Initializable {
     private ComboBox<Division> custDivCombo;
 
     @FXML
-    private Button saveBtn;
-
-    @FXML
-    private Button cancelBtn;
-
-    @FXML
     private TextField custIDTxt;
 
+    /** initializes the Update Customer screen */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -82,6 +77,7 @@ public class UpdateCustomerController implements Initializable {
         }
     }
 
+    /** displays the divisions */
     @FXML
     void divisionList(ActionEvent event) {
 
@@ -89,6 +85,8 @@ public class UpdateCustomerController implements Initializable {
         custDivCombo.setItems(Division.getCountryDivisions(c));
     }
 
+    /** @throws IOException
+     * returns to Main Menu without saving */
     @FXML
     void onCancel(ActionEvent event) throws IOException {
 
@@ -99,6 +97,9 @@ public class UpdateCustomerController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** @throws SQLException
+     * @throws IOException
+     * saves the customer and returns to the Main Menu */
     @FXML
     void onSave(ActionEvent event) throws SQLException, IOException {
 

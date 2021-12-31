@@ -53,10 +53,6 @@ public class Division {
         return division;
     }
 
-    public Timestamp getCreatedDate() {
-        return createdDate;
-    }
-
     public String getCreatedBy() {
         return createdBy;
     }

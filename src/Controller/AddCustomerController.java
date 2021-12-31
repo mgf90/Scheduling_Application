@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -41,18 +40,14 @@ public class AddCustomerController implements Initializable {
     @FXML
     private ComboBox<Division> custDivCombo;
 
-    @FXML
-    private Button saveBtn;
-
-    @FXML
-    private Button cancelBtn;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         custCountryCombo.setItems(Country.getCountries());
     }
 
+    /** @throws IOException
+     * exits the screen without saving the customer */
     @FXML
     void onCancel(ActionEvent event) throws IOException {
 
@@ -63,6 +58,9 @@ public class AddCustomerController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** @throws IOException
+     * @throws SQLException
+     * saves the customer data and returns to the Main Menu */
     @FXML
     void onSave(ActionEvent event) throws IOException, SQLException {
 
@@ -89,6 +87,7 @@ public class AddCustomerController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** gets a list of divisions */
     @FXML
     private void divisionList(ActionEvent event) {
         Country c = custCountryCombo.getValue();

@@ -241,6 +241,7 @@ public class MainMenuController implements Initializable {
         stage.centerOnScreen();
     }
 
+    /** sets the appointment table with either a weekly or monthly display */
     @FXML
     void weekMonthToggle(ActionEvent event) {
 
@@ -269,6 +270,8 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /** @throws IOException
+     * goes to the Report screen */
     @FXML
     void onReport(ActionEvent event) throws IOException {
 

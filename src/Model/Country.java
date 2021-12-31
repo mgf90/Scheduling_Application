@@ -20,6 +20,7 @@ public class Country {
     private Timestamp lastUpdate;
     private String updatedBy;
 
+    /** constructs a Country object */
     public Country(int id, String name, Timestamp createdDate, String createdBy, Timestamp lastUpdate, String updatedBy) {
         this.id = id;
         this.name = name;
@@ -29,39 +30,44 @@ public class Country {
         this.updatedBy = updatedBy;
     }
 
+    /** @return country ID */
     public int getId() {
         return id;
     }
 
+    /** @return country name */
     public String getName() {
         return name;
     }
 
-    public Timestamp getCreatedDate() {
-        return createdDate;
-    }
-
+    /** @return user who created country */
     public String getCreatedBy() {
         return createdBy;
     }
 
+    /** @return time of the last update */
     public Timestamp getLastUpdate() {
         return lastUpdate;
     }
 
+    /** @return user who updated last */
     public String getUpdatedBy() {
         return updatedBy;
     }
 
+    /** @return list of all countries */
     public static ObservableList<Country> getCountries() {
         return countries;
     }
 
+    /** @return country names as a string */
     @Override
     public String toString() {
         return this.name;
     }
 
+    /** @return country name by ID
+     * @param id */
     public static Country getCountryName(int id) {
 
         int i = 0;
@@ -74,6 +80,8 @@ public class Country {
         return null;
     }
 
+    /** @throws SQLException
+     * @return list of countries from the database */
     public static ObservableList<Country> updateCountries() throws SQLException {
 
         countries.clear();

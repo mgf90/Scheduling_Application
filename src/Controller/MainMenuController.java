@@ -128,7 +128,30 @@ public class MainMenuController implements Initializable {
         apptCustIDCol.setCellValueFactory(new PropertyValueFactory<>("custID"));
         apptUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+        startView = LoginScreenController.getLogInTime();
+        endView = startView.plusMinutes(15);
+
+        String start = startView.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String end = endView.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+
         try {
+//            Appointment.findAppointmentByStart(start, end, LoginScreenController.getCorrectID());
+//            if (Appointment.getAppointmentsSoon().size() > 0) {
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Appointment Upcoming");
+//                alert.setHeaderText(null);
+//                alert.setContentText("Appointment #" + Appointment.getAppointmentsSoon().get(0).getID() + " is happening soon at " + Appointment.getAppointmentsSoon().get(0).getStart());
+//
+//                alert.showAndWait();
+//            } else {
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Appointment Upcoming");
+//                alert.setHeaderText(null);
+//                alert.setContentText("No appointments within the next 15 minutes");
+//
+//                alert.showAndWait();
+//            }
             custTable.setItems(Customer.getCustomers());
             apptTable.setItems(Appointment.getAllAppointments());
         } catch (SQLException e) {

@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Appointment;
 import Model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -28,7 +31,8 @@ public class LoginScreenController implements Initializable {
 
     String checkUser, checkPass;
     public static String correctUser;
-    public static int correctID;
+    private static int correctID;
+    private static ZonedDateTime logInTime;
     Locale currentLocale = Locale.getDefault();
     ResourceBundle lang = ResourceBundle.getBundle("Language.Nat", currentLocale);
 
@@ -52,6 +56,14 @@ public class LoginScreenController implements Initializable {
 
     @FXML
     private Label titleLbl;
+
+    public static ZonedDateTime getLogInTime() {
+        return logInTime;
+    }
+
+    public static int getCorrectID() {
+        return correctID;
+    }
 
     @FXML
     void onExit(ActionEvent event) {
@@ -93,7 +105,30 @@ public class LoginScreenController implements Initializable {
 
                 if (rs.next()) {
                     this.correctUser = rs.getString("User_Name");
-                    this.correctID = rs.getInt("User_ID");
+                    correctID = rs.getInt("User_ID");
+                    logInTime = ZonedDateTime.now();
+
+                    ZonedDateTime endView = logInTime.plusMinutes(15);
+
+                    String start = logInTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    String end = endView.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                    Appointment.findAppointmentByStart(start, end, getCorrectID());
+                    if (Appointment.getAppointmentsSoon().size() > 0) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Appointment Upcoming");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Appointment #" + Appointment.getAppointmentsSoon().get(0).getID() + " is happening soon at " + Appointment.getAppointmentsSoon().get(0).getStart());
+
+                        alert.showAndWait();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Appointment Upcoming");
+                        alert.setHeaderText(null);
+                        alert.setContentText("No appointments within the next 15 minutes");
+
+                        alert.showAndWait();
+                    }
 
                     Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                     Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));

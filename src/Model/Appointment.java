@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 public class Appointment {
 
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private static ObservableList<Appointment> appointmentsSoon = FXCollections.observableArrayList();
 
     private int ID;
     private String title;
@@ -45,7 +46,6 @@ public class Appointment {
         this.userID = userID;
         this.contactID = contactID;
     }
-
 
     public static ObservableList<Appointment> getAllAppointments() {
         return allAppointments;
@@ -105,6 +105,10 @@ public class Appointment {
 
     public int getContactID() {
         return contactID;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsSoon() {
+        return appointmentsSoon;
     }
 
     public static void deleteAppointment(Appointment appt) throws SQLException {
@@ -187,15 +191,32 @@ public class Appointment {
 
     public static Boolean invalidAppointment(Appointment appt) throws SQLException {
 
-        String sql = "SELECT * FROM appointments WHERE Customer_ID = ? AND ((Start BETWEEN ? AND ?) OR (End BETWEEN ? AND ?));";
+        String sql = "SELECT * FROM appointments WHERE Customer_ID = ? AND ((Start BETWEEN ? AND ?) OR (End BETWEEN ? AND ?)) AND Appointment_ID != ?;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setInt(1, appt.getCustID());
         ps.setTimestamp(2, appt.getStart());
         ps.setTimestamp(3, appt.getEnd());
         ps.setTimestamp(4, appt.getStart());
         ps.setTimestamp(5, appt.getEnd());
+        ps.setInt(6, appt.getID());
         ResultSet rs = ps.executeQuery();
 
         return rs.next();
+    }
+
+    public static void findAppointmentByStart(String start, String end, int id) throws SQLException {
+
+        appointmentsSoon.clear();
+
+        String sql = "SELECT * FROM appointments WHERE (Start BETWEEN ? AND ?) AND User_ID = ?;";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ps.setString(1, start);
+        ps.setString(2, end);
+        ps.setInt(3, id);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            appointmentsSoon.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+        }
     }
 }

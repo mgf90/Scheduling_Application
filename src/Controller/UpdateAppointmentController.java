@@ -147,7 +147,7 @@ public class UpdateAppointmentController implements Initializable {
             Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
             String updatedBy = LoginScreenController.correctUser;
             int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
-            int userID = LoginScreenController.correctID;
+            int userID = LoginScreenController.getCorrectID();
             int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
 
             Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);

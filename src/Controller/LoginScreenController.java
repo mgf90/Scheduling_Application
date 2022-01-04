@@ -82,19 +82,6 @@ public class LoginScreenController implements Initializable {
     @FXML
     void onLogIn(ActionEvent event) throws IOException, SQLException {
 
-        checkUser = usernameTxt.getText();
-        checkPass = passwordTxt.getText();
-        String path = "D:\\Programming\\Java\\Scheduling Application\\src\\";
-        String fName = "login_activity.txt";
-
-        File f1 = new File(path, fName);
-        FileWriter fw;
-        if(!f1.exists()) {
-            f1.createNewFile();
-            fw = new FileWriter(f1);
-        } else {
-            fw = new FileWriter(f1, true);
-        }
 //        BufferedWriter bw = new BufferedWriter(fw);
 
 //        Boolean check = User.verifyUser(checkUser, checkPass);
@@ -117,6 +104,20 @@ public class LoginScreenController implements Initializable {
 //        }
 
         try {
+            checkUser = usernameTxt.getText();
+            checkPass = passwordTxt.getText();
+            String path = "src\\";
+            String fName = "login_activity.txt";
+
+            File f1 = new File(path, fName);
+            FileWriter fw;
+            if(!f1.exists()) {
+                f1.createNewFile();
+                fw = new FileWriter(f1);
+            } else {
+                fw = new FileWriter(f1, true);
+            }
+
             if (checkUser != null && checkPass != null) {
                 String sql = "Select * from users Where User_Name='" + checkUser + "' and Password='" + checkUser + "'";
                 Statement stmt = DBConnection.getConnection().createStatement();

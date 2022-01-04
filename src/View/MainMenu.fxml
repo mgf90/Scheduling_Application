@@ -22,11 +22,11 @@
                         <TableView fx:id="custTable" prefHeight="512.0" prefWidth="1171.0">
                           <columns>
                             <TableColumn fx:id="custIDCol" prefWidth="114.0" text="Customer ID" />
-                            <TableColumn fx:id="custNameCol" prefWidth="198.0" text="Name" />
-                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="277.0" text="Address" />
-                              <TableColumn fx:id="custZipCol" prefWidth="190.0" text="Zip Code" />
-                              <TableColumn fx:id="custPhoneCol" prefWidth="182.0" text="Phone Number" />
-                              <TableColumn fx:id="custDivCol" prefWidth="209.0" text="Division" />
+                            <TableColumn fx:id="custNameCol" prefWidth="222.0" text="Name" />
+                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="344.0" text="Address" />
+                              <TableColumn fx:id="custZipCol" prefWidth="95.0" text="Zip Code" />
+                              <TableColumn fx:id="custPhoneCol" prefWidth="192.0" text="Phone Number" />
+                              <TableColumn fx:id="custDivCol" prefWidth="203.0" text="Division" />
                           </columns>
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddCustomer" text="Add" />

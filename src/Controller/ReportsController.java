@@ -73,7 +73,7 @@ public class ReportsController implements Initializable {
 
     /** exits to the Main Menu */
     @FXML
-    void onExit(ActionEvent event) throws IOException {
+    void onBack(ActionEvent event) throws IOException {
 
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));

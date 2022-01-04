@@ -12,13 +12,13 @@ public class Report {
      * report counts and groups together appointments by Type and Month */
     public static String Report1() throws SQLException {
 
-        String sql = "SELECT COUNT(Appointment_ID) AS Count, Type , MONTH(Start) AS Month FROM appointments GROUP BY Month, Type;";
+        String sql = "SELECT Type , MONTH(Start) AS Month, COUNT(Appointment_ID) AS Count FROM appointments GROUP BY Month, Type;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         String report = "";
 
         while (rs.next()) {
-            report += "Count: " + rs.getString(1) + " || Type: " + rs.getString(2) + " || Month: " + rs.getString(3) + "\n\n";
+            report += "Type: " + rs.getString(1) + " || Month: " + rs.getString(2) + " || Count: " + rs.getString(3) + "\n\n";
         }
 
         return report;

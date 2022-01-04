@@ -3,6 +3,7 @@ package Controller;
 import Database.DBConnection;
 import Model.Appointment;
 import Model.Customer;
+import Model.Division;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,8 @@ public class MainMenuController implements Initializable {
     private static int modCustInt;
     private static Appointment modAppt;
     private static int modApptInt;
+    private static int openHour;
+    private static int closeHour;
     public static ZonedDateTime startView;
     public static ZonedDateTime endView;
 
@@ -47,6 +50,9 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private TableColumn<Customer, String> custPhoneCol;
+
+    @FXML
+    private TableColumn<Customer, Integer> custCountryCol;
 
     @FXML
     private TableColumn<Customer, Integer> custDivCol;

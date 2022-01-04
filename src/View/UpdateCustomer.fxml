@@ -28,7 +28,7 @@
                 <Font size="18.0" />
             </font>
         </Label>
-      <TextField fx:id="custIDTxt" editable="false" layoutX="126.0" layoutY="247.0" />
+      <TextField fx:id="custIDTxt" disable="true" editable="false" layoutX="126.0" layoutY="247.0" />
       <Label layoutX="69.0" layoutY="251.0" text="ID" />
     </children>
 </AnchorPane>

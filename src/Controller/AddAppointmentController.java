@@ -46,9 +46,6 @@ public class AddAppointmentController implements Initializable {
     private ComboBox<Integer> apptStartHourCombo;
 
     @FXML
-    private DatePicker apptEndDate;
-
-    @FXML
     private ComboBox<Integer> apptEndHourCombo;
 
     @FXML
@@ -122,7 +119,7 @@ public class AddAppointmentController implements Initializable {
             String type = apptTypeTxt.getText();
 
             String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
-            String endString = apptEndDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
+            String endString = apptStartDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
 
             var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
             var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);

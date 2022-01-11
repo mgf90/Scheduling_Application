@@ -3,7 +3,6 @@ package Controller;
 import Database.DBConnection;
 import Model.Appointment;
 import Model.Customer;
-import Model.Division;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,8 +27,6 @@ public class MainMenuController implements Initializable {
     private static int modCustInt;
     private static Appointment modAppt;
     private static int modApptInt;
-    private static int openHour;
-    private static int closeHour;
     public static ZonedDateTime startView;
     public static ZonedDateTime endView;
 
@@ -95,6 +92,9 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private RadioButton monthView;
+
+    @FXML
+    private RadioButton allView;
 
     @FXML
     private ToggleGroup ViewWeekMonth;
@@ -251,6 +251,11 @@ public class MainMenuController implements Initializable {
     @FXML
     void weekMonthToggle(ActionEvent event) {
 
+        if (ViewWeekMonth.getSelectedToggle().equals(allView)) {
+            startView = ZonedDateTime.now().minusYears(2000);
+            endView = ZonedDateTime.now().plusYears(1000);
+        }
+
         if (ViewWeekMonth.getSelectedToggle().equals(weekView)) {
             startView = ZonedDateTime.now().withHour(0).withMinute(0);
             endView = startView.plusWeeks(1).withHour(23).withMinute(59);
@@ -263,7 +268,11 @@ public class MainMenuController implements Initializable {
 
         String start = startView.format(DateTimeFormatter.ISO_LOCAL_DATE);
         String end = endView.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        viewLabel.setText(start + " - " + end);
+        if (ViewWeekMonth.getSelectedToggle().equals(allView)) {
+            viewLabel.setText("All Appointments");
+        } else {
+            viewLabel.setText(start + " - " + end);
+        }
 
         start = startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
         end = endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);

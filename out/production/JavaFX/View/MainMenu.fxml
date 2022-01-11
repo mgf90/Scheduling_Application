@@ -22,11 +22,11 @@
                         <TableView fx:id="custTable" prefHeight="512.0" prefWidth="1171.0">
                           <columns>
                             <TableColumn fx:id="custIDCol" prefWidth="114.0" text="Customer ID" />
-                            <TableColumn fx:id="custNameCol" prefWidth="198.0" text="Name" />
-                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="277.0" text="Address" />
-                              <TableColumn fx:id="custZipCol" prefWidth="190.0" text="Zip Code" />
-                              <TableColumn fx:id="custPhoneCol" prefWidth="182.0" text="Phone Number" />
-                              <TableColumn fx:id="custDivCol" prefWidth="209.0" text="Division" />
+                            <TableColumn fx:id="custNameCol" prefWidth="222.0" text="Name" />
+                              <TableColumn fx:id="custAddressCol" minWidth="7.0" prefWidth="344.0" text="Address" />
+                              <TableColumn fx:id="custZipCol" prefWidth="95.0" text="Zip Code" />
+                              <TableColumn fx:id="custPhoneCol" prefWidth="192.0" text="Phone Number" />
+                              <TableColumn fx:id="custDivCol" prefWidth="203.0" text="Division" />
                           </columns>
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddCustomer" text="Add" />
@@ -57,12 +57,12 @@
                         <Button fx:id="deleteApptBtn" layoutX="200.0" layoutY="550.0" mnemonicParsing="false" onAction="#onDeleteAppointment" text="Delete" />
                         <Button fx:id="updateApptBtn" layoutX="125.0" layoutY="550.0" mnemonicParsing="false" onAction="#onUpdateAppointment" text="Update" />
                         <Button fx:id="addApptBtn" layoutX="61.0" layoutY="550.0" mnemonicParsing="false" onAction="#onAddAppointment" text="Add" />
-                        <RadioButton fx:id="weekView" layoutX="381.0" layoutY="542.0" mnemonicParsing="false" onAction="#weekMonthToggle" text="Week">
+                        <RadioButton fx:id="weekView" layoutX="381.0" layoutY="555.0" mnemonicParsing="false" onAction="#weekMonthToggle" text="Week">
                            <toggleGroup>
                               <ToggleGroup fx:id="ViewWeekMonth" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="monthView" layoutX="381.0" layoutY="567.0" mnemonicParsing="false" onAction="#weekMonthToggle" text="Month" toggleGroup="$ViewWeekMonth" />
+                        <RadioButton fx:id="monthView" layoutX="381.0" layoutY="580.0" mnemonicParsing="false" onAction="#weekMonthToggle" text="Month" toggleGroup="$ViewWeekMonth" />
                         <Label layoutX="321.0" layoutY="553.0" text="View By:">
                            <font>
                               <Font size="14.0" />
@@ -78,6 +78,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <RadioButton fx:id="allView" layoutX="381.0" layoutY="530.0" mnemonicParsing="false" onAction="#weekMonthToggle" selected="true" text="All" toggleGroup="$ViewWeekMonth" />
                      </children>
                   </AnchorPane>
             </content>

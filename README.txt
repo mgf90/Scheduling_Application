@@ -3,6 +3,7 @@ By Moses Farmer
 mgavinfarmer@gmail.com
 C195 Software II
 12/31/2021
+Version: QAM2
 
 This JavaFX application enables users to schedule, update, and delete appointments. It also lets them create, update, and delete customers and their associated appointments. All data is kept and updated within a MySQL database.
 

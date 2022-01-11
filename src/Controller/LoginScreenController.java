@@ -106,7 +106,7 @@ public class LoginScreenController implements Initializable {
         try {
             checkUser = usernameTxt.getText();
             checkPass = passwordTxt.getText();
-            String path = "src\\";
+            String path = "\\";
             String fName = "login_activity.txt";
 
             File f1 = new File(path, fName);

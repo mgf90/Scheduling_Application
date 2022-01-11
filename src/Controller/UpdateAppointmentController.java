@@ -3,6 +3,7 @@ package Controller;
 import Model.Appointment;
 import Model.Contact;
 import Model.Customer;
+import Model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,17 +17,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class UpdateAppointmentController implements Initializable {
 
     private int modApptIndex = MainMenuController.getModApptInt();
     private ObservableList<Integer> hours = FXCollections.observableArrayList();
-    private ObservableList<Integer> minutes = FXCollections.observableArrayList(0, 15, 30, 45);
+    private ObservableList<Integer> minutes = FXCollections.observableArrayList(00, 15, 30, 45);
 
     @FXML
     private TextField apptTitleTxt;
@@ -56,6 +58,9 @@ public class UpdateAppointmentController implements Initializable {
     private ComboBox<Customer> apptCustCombo;
 
     @FXML
+    private ComboBox<User> apptUserCombo;
+
+    @FXML
     private ComboBox<Integer> apptStartMinCombo;
 
     @FXML
@@ -77,24 +82,26 @@ public class UpdateAppointmentController implements Initializable {
         try {
             Appointment appt = Appointment.getAllAppointments().get(modApptIndex);
             apptTitleTxt.setText(appt.getTitle());
-            apptStartDate.setValue(appt.getStart().toLocalDateTime().toLocalDate());
+            apptStartDate.setValue(appt.getStart().toLocalDate());
             apptStartMinCombo.setItems(minutes);
             apptStartHourCombo.setItems(hours);
-            apptStartMinCombo.setValue(appt.getStart().toLocalDateTime().getMinute());
-            apptStartHourCombo.setValue(appt.getStart().toLocalDateTime().getHour());
+            apptStartMinCombo.setValue(appt.getStart().getMinute());
+            apptStartHourCombo.setValue(appt.getStart().getHour());
             apptDescTxt.setText(appt.getDescription());
             apptLocTxt.setText(appt.getLocation());
             apptTypeTxt.setText(appt.getType());
             apptIDTxt.setText(String.valueOf(appt.getID()));
             apptEndMinCombo.setItems(minutes);
             apptEndHourCombo.setItems(hours);
-            apptEndMinCombo.setValue(appt.getEnd().toLocalDateTime().getMinute());
-            apptEndHourCombo.setValue(appt.getEnd().toLocalDateTime().getHour());
+            apptEndMinCombo.setValue(appt.getEnd().getMinute());
+            apptEndHourCombo.setValue(appt.getEnd().getHour());
 
             apptContCombo.setItems(Contact.getAllContacts());
             apptContCombo.setValue(Contact.getContact(appt.getContactID()));
             apptCustCombo.setItems(Customer.getCustomers());
             apptCustCombo.setValue(Customer.getCustomer(appt.getCustID()));
+            apptUserCombo.setItems(User.getAllUsers());
+            apptUserCombo.setValue(User.getUserName(appt.getUserID()));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,38 +128,65 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     void onSave(ActionEvent event) throws ParseException, SQLException, IOException {
 
-        if (apptStartHourCombo.getValue() < 8 || apptStartHourCombo.getValue() >= 22 || apptEndHourCombo.getValue() >= 22) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please set your appointment between 8am and 10pm");
-
-            alert.showAndWait();
-
-        } else {
             int id = Integer.parseInt(apptIDTxt.getText());
             String title = apptTitleTxt.getText();
             String description = apptDescTxt.getText();
             String location = apptLocTxt.getText();
             String type = apptTypeTxt.getText();
 
-            String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
-            String endString = apptStartDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalDate startDate = apptStartDate.getValue();
 
-            var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
-            var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);
-            Timestamp start = new Timestamp(date1.getTime());
-            Timestamp end = new Timestamp(date2.getTime());
+            String startHour = String.valueOf(apptStartHourCombo.getValue());
+            String startMinute = String.valueOf(apptStartMinCombo.getValue());
+            String startString = startHour + ":" + startMinute + ":00";
 
-            Timestamp createdDate = new Timestamp(System.currentTimeMillis());
+            if (apptStartHourCombo.getValue() < 10) {
+                startHour = "0" + startHour;
+            }
+            if (apptStartMinCombo.getValue() == 0) {
+                startString = startHour + ":" + startMinute + "0:00";
+            }
+//            String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
+//            String endString = apptStartDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
+
+            LocalTime startTime = LocalTime.parse(startString, formatter);
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+            ZonedDateTime startLocal = start.atZone(localZone);
+            ZonedDateTime startUTC = startLocal.withZoneSameInstant(ZoneId.of("UTC"));
+
+            String endHour = String.valueOf(apptEndHourCombo.getValue());
+            String endMinute = String.valueOf(apptEndMinCombo.getValue());
+            String endString = endHour + ":" + endMinute + ":00";
+
+            if (apptEndHourCombo.getValue() < 10) {
+                endHour = "0" + endHour;
+            }
+            if (apptEndMinCombo.getValue() == 0) {
+                endString = endHour + ":" + endMinute + "0:00";
+            }
+
+            LocalTime endTime = LocalTime.parse(endString, formatter);
+            LocalDateTime end = LocalDateTime.of(startDate, endTime);
+            ZonedDateTime endLocal = end.atZone(localZone);
+            ZonedDateTime endUTC = endLocal.withZoneSameInstant(ZoneId.of("UTC"));
+
+//            var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
+//            var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);
+//            ZonedDateTime start = ZonedDateTime.from(date1.ge);
+//            ZonedDateTime end = ZonedDateTime.from(date2.toInstant());
+//            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.from(localEnd), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC+0"));
+
+            LocalDateTime createdDate = LocalDateTime.now(ZoneId.of("UTC"));
             String createdBy = LoginScreenController.correctUser;
-            Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
+            LocalDateTime lastUpdate = LocalDateTime.now(ZoneId.of("UTC"));
             String updatedBy = LoginScreenController.correctUser;
             int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
-            int userID = LoginScreenController.getCorrectID();
+            int userID = apptUserCombo.getSelectionModel().getSelectedItem().getID();
             int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
 
-            Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
+            Appointment appt = new Appointment(id, title, description, location, type, startUTC.toLocalDateTime(), endUTC.toLocalDateTime(), createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
 
             if (Appointment.invalidAppointment(appt)) {
 
@@ -160,6 +194,15 @@ public class UpdateAppointmentController implements Initializable {
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Customer already has an appointment at this time");
+
+                alert.showAndWait();
+
+            } else if (!Appointment.withinBusinessHours(appt)) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please set your appointment between 8am and 10pm Eastern Time");
 
                 alert.showAndWait();
 
@@ -175,4 +218,3 @@ public class UpdateAppointmentController implements Initializable {
             }
         }
     }
-}

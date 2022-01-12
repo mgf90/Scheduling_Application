@@ -15,22 +15,23 @@ public class Appointment {
     private static ObservableList<Appointment> appointmentsSoon = FXCollections.observableArrayList();
 
     private final int ID;
-    private final String title;
-    private final String description;
-    private final String location;
-    private final String type;
-    private final LocalDateTime start;
-    private final LocalDateTime end;
-    private final LocalDateTime createdDate;
-    private final String createdBy;
-    private final LocalDateTime lastUpdate;
-    private final String updatedBy;
-    private final int custID;
-    private final int userID;
-    private final int contactID;
+    private String title;
+    private String description;
+    private String location;
+    private String type;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private LocalDateTime createdDate;
+    private String createdBy;
+    private LocalDateTime lastUpdate;
+    private String updatedBy;
+    private int custID;
+    private int userID;
+    private int contactID;
 
     /** constructs an Appointment object */
-    public Appointment(int ID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate, String createdBy, LocalDateTime lastUpdate, String updatedBy, int custID, int userID, int contactID) {
+    public Appointment(int ID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate, String createdBy,
+                       LocalDateTime lastUpdate, String updatedBy, int custID, int userID, int contactID) {
         this.ID = ID;
         this.title = title;
         this.description = description;
@@ -160,7 +161,10 @@ public class Appointment {
 
         while (rs.next()) {
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"),
+                    rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 
@@ -179,14 +183,18 @@ public class Appointment {
 
         while (rs.next()) {
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"),
+                    rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 
     /** @param appt updates selected appointment */
     public static void updateAppointment(Appointment appt) throws SQLException {
 
-        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = NOW(), " +
+                "Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setString(1, appt.getTitle());
         ps.setString(2, appt.getDescription());
@@ -208,7 +216,8 @@ public class Appointment {
     /** @param appt adds appointment to the database */
     public static void addAppointment(Appointment appt) throws SQLException {
 
-        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setString(1, appt.getTitle());
         ps.setString(2, appt.getDescription());
@@ -276,7 +285,10 @@ public class Appointment {
 
         while (rs.next()) {
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-            appointmentsSoon.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(localZone).toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            appointmentsSoon.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null,
+                    rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 }

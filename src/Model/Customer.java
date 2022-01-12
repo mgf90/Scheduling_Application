@@ -11,7 +11,7 @@ public class Customer {
 
     private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
-    private int ID;
+    private final int ID;
     private String name;
     private String address;
     private String zipCode;

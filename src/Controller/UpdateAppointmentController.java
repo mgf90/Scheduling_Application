@@ -138,39 +138,41 @@ public class UpdateAppointmentController implements Initializable {
             LocalDate startDate = apptStartDate.getValue();
 
             String startHour = String.valueOf(apptStartHourCombo.getValue());
-            String startMinute = String.valueOf(apptStartMinCombo.getValue());
-            String startString = startHour + ":" + startMinute + ":00";
-
             if (apptStartHourCombo.getValue() < 10) {
                 startHour = "0" + startHour;
             }
+            String startMinute = String.valueOf(apptStartMinCombo.getValue());
+            String startString = startHour + ":" + startMinute + ":00";
             if (apptStartMinCombo.getValue() == 0) {
                 startString = startHour + ":" + startMinute + "0:00";
             }
+
+
 //            String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
 //            String endString = apptStartDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
 
             LocalTime startTime = LocalTime.parse(startString, formatter);
-            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+//            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
             LocalDateTime start = LocalDateTime.of(startDate, startTime);
-            ZonedDateTime startLocal = start.atZone(localZone);
-            ZonedDateTime startUTC = startLocal.withZoneSameInstant(ZoneId.of("UTC"));
+//            ZonedDateTime startLocal = start.atZone(localZone);
+//            ZonedDateTime startUTC = startLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
             String endHour = String.valueOf(apptEndHourCombo.getValue());
-            String endMinute = String.valueOf(apptEndMinCombo.getValue());
-            String endString = endHour + ":" + endMinute + ":00";
-
             if (apptEndHourCombo.getValue() < 10) {
                 endHour = "0" + endHour;
             }
+            String endMinute = String.valueOf(apptEndMinCombo.getValue());
+            String endString = endHour + ":" + endMinute + ":00";
+
+
             if (apptEndMinCombo.getValue() == 0) {
                 endString = endHour + ":" + endMinute + "0:00";
             }
 
             LocalTime endTime = LocalTime.parse(endString, formatter);
             LocalDateTime end = LocalDateTime.of(startDate, endTime);
-            ZonedDateTime endLocal = end.atZone(localZone);
-            ZonedDateTime endUTC = endLocal.withZoneSameInstant(ZoneId.of("UTC"));
+//            ZonedDateTime endLocal = end.atZone(localZone);
+//            ZonedDateTime endUTC = endLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
 //            var date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(startString);
 //            var date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(endString);
@@ -186,7 +188,7 @@ public class UpdateAppointmentController implements Initializable {
             int userID = apptUserCombo.getSelectionModel().getSelectedItem().getID();
             int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
 
-            Appointment appt = new Appointment(id, title, description, location, type, startUTC.toLocalDateTime(), endUTC.toLocalDateTime(), createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
+            Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
 
             if (Appointment.invalidAppointment(appt)) {
 

@@ -12,6 +12,6 @@ To use the application, enter the correct username and password (default for bot
 The third report counts and groups together appointments by day of the week.
 
 IntelliJ IDEA Community Edition 2021.1.2
-Java Corretto 11.0.12
+Java 11 - 11.0.11
 JavaFX-SDK-11.0.2
-mysql-connector-java-8.0.22
+mysql-connector-java-8.0.25

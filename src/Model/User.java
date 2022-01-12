@@ -15,7 +15,7 @@ public class User {
 
     private static ObservableList<User> allUsers = FXCollections.observableArrayList();
 
-    private int ID;
+    private final int ID;
     private String name;
     private String password;
     private LocalDateTime createDate;

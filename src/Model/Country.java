@@ -14,7 +14,7 @@ public class Country {
     private static ObservableList<Country> countries = FXCollections.observableArrayList();
 
     final private int id;
-    final private String name;
+    private String name;
     private Timestamp createdDate;
     private String createdBy;
     private Timestamp lastUpdate;

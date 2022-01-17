@@ -20,6 +20,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +33,9 @@ public class LoginScreenController implements Initializable {
     String checkUser, checkPass;
     public static String correctUser;
     private static int correctID;
-    private static ZonedDateTime logInTime;
+    private static LocalDateTime logInTime;
+    private static ZonedDateTime loginZoned;
+    private static ZonedDateTime loginUTC;
     Locale currentLocale = Locale.getDefault();
     ResourceBundle lang = ResourceBundle.getBundle("Language.Nat", currentLocale);
 
@@ -58,7 +61,7 @@ public class LoginScreenController implements Initializable {
     private Label titleLbl;
 
     /** @return the login time */
-    public static ZonedDateTime getLogInTime() {
+    public static LocalDateTime getLogInTime() {
         return logInTime;
     }
 
@@ -106,10 +109,14 @@ public class LoginScreenController implements Initializable {
         try {
             checkUser = usernameTxt.getText();
             checkPass = passwordTxt.getText();
-            String path = "src\\";
+            logInTime = LocalDateTime.now();
+            loginZoned = logInTime.atZone(ZoneId.systemDefault());
+            loginUTC = loginZoned.withZoneSameInstant(ZoneId.of("UTC"));
+
+//            String path = "\\";
             String fName = "login_activity.txt";
 
-            File f1 = new File(path, fName);
+            File f1 = new File(fName);
             FileWriter fw;
             if(!f1.exists()) {
                 f1.createNewFile();
@@ -126,11 +133,11 @@ public class LoginScreenController implements Initializable {
                 if (rs.next()) {
                     this.correctUser = rs.getString("User_Name");
                     correctID = rs.getInt("User_ID");
-                    logInTime = ZonedDateTime.now();
-                    fw.write("User Name: " + correctUser + " || Date: " + logInTime + " LOGIN SUCCESSFUL\n");
+//                    logInTime = LocalDateTime.now();
+                    fw.write("User Name: " + correctUser + " || Date: " + loginUTC + " LOGIN SUCCESSFUL\n");
                     fw.close();
 
-                    ZonedDateTime endView = logInTime.plusMinutes(15);
+                    LocalDateTime endView = logInTime.plusMinutes(15);
 
                     String start = logInTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     String end = endView.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -158,7 +165,7 @@ public class LoginScreenController implements Initializable {
                     stage.show();
                     stage.centerOnScreen();
                 } else {
-                    fw.write("User Name: " + checkUser + " || Date: " + ZonedDateTime.now() + " INVALID LOGIN ATTEMPT\n");
+                    fw.write("User Name: " + checkUser + " || Date: " + loginUTC + " INVALID LOGIN ATTEMPT\n");
                     fw.close();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);

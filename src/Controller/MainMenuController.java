@@ -3,7 +3,8 @@ package Controller;
 import Database.DBConnection;
 import Model.Appointment;
 import Model.Customer;
-import Model.Division;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +17,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -28,8 +32,7 @@ public class MainMenuController implements Initializable {
     private static int modCustInt;
     private static Appointment modAppt;
     private static int modApptInt;
-    private static int openHour;
-    private static int closeHour;
+    private static ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
     public static ZonedDateTime startView;
     public static ZonedDateTime endView;
 
@@ -95,6 +98,9 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private RadioButton monthView;
+
+    @FXML
+    private RadioButton allView;
 
     @FXML
     private ToggleGroup ViewWeekMonth;
@@ -251,29 +257,46 @@ public class MainMenuController implements Initializable {
     @FXML
     void weekMonthToggle(ActionEvent event) {
 
+        if (ViewWeekMonth.getSelectedToggle().equals(allView)) {
+            apptTable.setItems(Appointment.getAllAppointments());
+            viewLabel.setText("All Appointments");
+        }
+
         if (ViewWeekMonth.getSelectedToggle().equals(weekView)) {
-            startView = ZonedDateTime.now().withHour(0).withMinute(0);
-            endView = startView.plusWeeks(1).withHour(23).withMinute(59);
+//            startView = ZonedDateTime.now().withHour(0).withMinute(0);
+//            endView = startView.plusWeeks(1).withHour(23).withMinute(59);
+            ObservableList<Appointment> appts = Appointment.getAllAppointments();
+            getApptThisWeek(appts);
+            apptTable.setItems(filteredAppointments);
+            viewLabel.setText("This Week");
         }
 
         if (ViewWeekMonth.getSelectedToggle().equals(monthView)) {
-            startView = ZonedDateTime.now().withHour(0).withMinute(0);
-            endView = startView.plusMonths(1).withHour(23).withMinute(59);
+//            startView = ZonedDateTime.now().withHour(0).withMinute(0);
+//            endView = startView.plusMonths(1).withHour(23).withMinute(59);
+            ObservableList<Appointment> appts = Appointment.getAllAppointments();
+            getApptThisMonth(appts);
+            apptTable.setItems(filteredAppointments);
+            viewLabel.setText("This Month");
         }
 
-        String start = startView.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        String end = endView.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        viewLabel.setText(start + " - " + end);
-
-        start = startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
-        end = endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
-
-        try {
-            Appointment.selectAppointments(start, end);
-        }
-        catch(SQLException e) {
-            System.out.println("SQL Error!!! " + e);
-        }
+//        String start = startView.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//        String end = endView.format(DateTimeFormatter.ISO_LOCAL_DATE);
+//        if (ViewWeekMonth.getSelectedToggle().equals(allView)) {
+//            viewLabel.setText("All Appointments");
+//        } else {
+//            viewLabel.setText(start + " - " + end);
+//        }
+//
+//        start = startView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
+//        end = endView.withZoneSameInstant(ZoneId.of("UTC+0")).format(DateTimeFormatter.ISO_LOCAL_DATE);
+//
+//        try {
+//            Appointment.selectAppointments(start, end);
+//        }
+//        catch(SQLException e) {
+//            System.out.println("SQL Error!!! " + e);
+//        }
     }
 
     /** @throws IOException
@@ -294,5 +317,39 @@ public class MainMenuController implements Initializable {
 
         DBConnection.closeConnection();
         System.exit(0);
+    }
+
+    private static ObservableList<Appointment> getApptThisWeek(ObservableList<Appointment> apptList) {
+
+        filteredAppointments.clear();
+
+        WeekFields week = WeekFields.of(Locale.getDefault());
+        for (Appointment appt : apptList) {
+            int startWeek = appt.getStart().get(week.weekOfWeekBasedYear());
+            int endWeek = appt.getEnd().get(week.weekOfWeekBasedYear());
+            int currentWeek = LocalDate.now().get(week.weekOfWeekBasedYear());
+            if (startWeek == currentWeek || currentWeek == endWeek) {
+                filteredAppointments.add(appt);
+            }
+        }
+
+        return filteredAppointments;
+    }
+
+    private static ObservableList<Appointment> getApptThisMonth(ObservableList<Appointment> apptList) {
+
+        filteredAppointments.clear();
+
+        for (Appointment appt : apptList) {
+            int startMonth = appt.getStart().getMonthValue();
+            int endMonth = appt.getEnd().getMonthValue();
+            int currentMonth = LocalDate.now().getMonthValue();
+            if (startMonth == currentMonth || currentMonth == endMonth) {
+                filteredAppointments.add(appt);
+            }
+        }
+
+        return filteredAppointments;
+
     }
 }

@@ -4,33 +4,34 @@ import Controller.LoginScreenController;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+
+import java.sql.*;
+import java.time.*;
+import java.util.TimeZone;
 
 public class Appointment {
 
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static ObservableList<Appointment> appointmentsSoon = FXCollections.observableArrayList();
 
-    private int ID;
+    private final int ID;
     private String title;
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
-    private Timestamp createdDate;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private LocalDateTime createdDate;
     private String createdBy;
-    private Timestamp lastUpdate;
+    private LocalDateTime lastUpdate;
     private String updatedBy;
     private int custID;
     private int userID;
     private int contactID;
 
     /** constructs an Appointment object */
-    public Appointment(int ID, String title, String description, String location, String type, Timestamp start, Timestamp end, Timestamp createdDate, String createdBy, Timestamp lastUpdate, String updatedBy, int custID, int userID, int contactID) {
+    public Appointment(int ID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate, String createdBy,
+                       LocalDateTime lastUpdate, String updatedBy, int custID, int userID, int contactID) {
         this.ID = ID;
         this.title = title;
         this.description = description;
@@ -78,14 +79,24 @@ public class Appointment {
     }
 
     /** @return start time */
-    public Timestamp getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
+//    public String getStartUTC() {
+//        Date local = this.start;
+//        return local.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//    }
+
     /** @return end time */
-    public Timestamp getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
+
+//    public String getEndUTC() {
+//        ZonedDateTime local = this.end;
+//        return local.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//    }
 
     /** @return type */
     public String getType() {
@@ -93,7 +104,7 @@ public class Appointment {
     }
 
     /** @return the created date */
-    public Timestamp getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
@@ -103,7 +114,7 @@ public class Appointment {
     }
 
     /** @return time of last update */
-    public Timestamp getLastUpdate() {
+    public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
@@ -127,7 +138,7 @@ public class Appointment {
         return appointmentsSoon;
     }
 
-    /** @throws SQLException
+    /** @throws SQLException displays SQL error
      * @param appt deletes appointment from database */
     public static void deleteAppointment(Appointment appt) throws SQLException {
 
@@ -149,13 +160,17 @@ public class Appointment {
         ResultSet rs = ps.executeQuery(sql);
 
         while (rs.next()) {
-            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"),
+                    rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 
-    /** @throws SQLException
+    /** @throws SQLException displays SQL error
      * @param start selects appointments taking place between two times
-     * @param end */
+     * @param end end time of appointment */
     public static void selectAppointments(String start, String end) throws SQLException {
 
         allAppointments.clear();
@@ -167,22 +182,27 @@ public class Appointment {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+            allAppointments.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null, rs.getInt("Customer_ID"),
+                    rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 
     /** @param appt updates selected appointment */
     public static void updateAppointment(Appointment appt) throws SQLException {
 
-        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = NOW(), " +
+                "Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setString(1, appt.getTitle());
         ps.setString(2, appt.getDescription());
         ps.setString(3, appt.getLocation());
         ps.setString(4, appt.getType());
-        ps.setTimestamp(5, appt.getStart());
-        ps.setTimestamp(6, appt.getEnd());
-        ps.setTimestamp(7, appt.getCreatedDate());
+        ps.setTimestamp(5, Timestamp.valueOf(appt.getStart()));
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getEnd()));
+        ps.setTimestamp(7, Timestamp.valueOf(appt.getCreatedDate()));
         ps.setString(8, appt.getCreatedBy());
         ps.setString(9, LoginScreenController.correctUser);
         ps.setInt(10, appt.getCustID());
@@ -196,17 +216,18 @@ public class Appointment {
     /** @param appt adds appointment to the database */
     public static void addAppointment(Appointment appt) throws SQLException {
 
-        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setString(1, appt.getTitle());
         ps.setString(2, appt.getDescription());
         ps.setString(3, appt.getLocation());
         ps.setString(4, appt.getType());
-        ps.setTimestamp(5, appt.getStart());
-        ps.setTimestamp(6, appt.getEnd());
-        ps.setTimestamp(7, appt.getCreatedDate());
+        ps.setTimestamp(5, Timestamp.valueOf(appt.getStart()));
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getEnd()));
+        ps.setTimestamp(7, Timestamp.valueOf(appt.getCreatedDate()));
         ps.setString(8, appt.getCreatedBy());
-        ps.setTimestamp(9, appt.getLastUpdate());
+        ps.setTimestamp(9, Timestamp.valueOf(appt.getLastUpdate()));
         ps.setString(10, appt.getUpdatedBy());
         ps.setInt(11, appt.getCustID());
         ps.setInt(12, appt.getUserID());
@@ -215,27 +236,42 @@ public class Appointment {
     }
 
     /** @return whether the appointment is invalid based on overlapping times
-     * @throws SQLException
-     * @param appt */
+     * @throws SQLException displays SQL error
+     * @param appt the appointment to be checked */
     public static Boolean invalidAppointment(Appointment appt) throws SQLException {
 
         String sql = "SELECT * FROM appointments WHERE Customer_ID = ? AND ((Start BETWEEN ? AND ?) OR (End BETWEEN ? AND ?)) AND Appointment_ID != ?;";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
         ps.setInt(1, appt.getCustID());
-        ps.setTimestamp(2, appt.getStart());
-        ps.setTimestamp(3, appt.getEnd());
-        ps.setTimestamp(4, appt.getStart());
-        ps.setTimestamp(5, appt.getEnd());
+        ps.setTimestamp(2, Timestamp.valueOf(appt.getStart()));
+        ps.setTimestamp(3, Timestamp.valueOf(appt.getEnd()));
+        ps.setTimestamp(4, Timestamp.valueOf(appt.getStart()));
+        ps.setTimestamp(5, Timestamp.valueOf(appt.getEnd()));
         ps.setInt(6, appt.getID());
         ResultSet rs = ps.executeQuery();
 
         return rs.next();
     }
 
-    /** @throws SQLException
+    /** @param appt checks if appointment within business hours
+     * @return if within business hours*/
+    public static boolean withinBusinessHours(Appointment appt){
+
+        ZonedDateTime start = appt.getStart().atZone(ZoneId.of("America/New_York"));
+        ZonedDateTime end = appt.getEnd().atZone(ZoneId.of("America/New_York"));
+
+        ZonedDateTime open1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("America/New_York"));
+        ZonedDateTime open2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("America/New_York"));
+        ZonedDateTime close1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
+        ZonedDateTime close2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
+
+        return open1.isBefore(start) && open2.isBefore(end) && close1.isAfter(start)  && close2.isAfter(end);
+    }
+
+    /** @throws SQLException displays SQL error
      * @param id finds appointments between two times for a particular customer
-     * @param start
-     * @param end */
+     * @param start start time of appointment
+     * @param end end time of appointment*/
     public static void findAppointmentByStart(String start, String end, int id) throws SQLException {
 
         appointmentsSoon.clear();
@@ -248,7 +284,11 @@ public class Appointment {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            appointmentsSoon.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), null, null, null, null, rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+            appointmentsSoon.add(new Appointment(rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"),
+                    rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(),
+                    rs.getTimestamp("End").toLocalDateTime(), null, null, null, null,
+                    rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
     }
 }

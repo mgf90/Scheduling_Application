@@ -39,5 +39,7 @@
         <ComboBox fx:id="apptEndMinCombo" layoutX="413.0" layoutY="190.0" prefHeight="25.0" prefWidth="60.0" />
       <TextField fx:id="apptIDTxt" disable="true" editable="false" layoutX="338.0" layoutY="240.0" />
       <Label layoutX="281.0" layoutY="244.0" text="Appt ID" />
+      <ComboBox fx:id="apptUserCombo" layoutX="338.0" layoutY="290.0" prefWidth="150.0" />
+      <Label layoutX="288.0" layoutY="294.0" text="User" />
     </children>
 </AnchorPane>

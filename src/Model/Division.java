@@ -13,7 +13,7 @@ public class Division {
 
     private static ObservableList<Division> allDivisions = FXCollections.observableArrayList();
 
-    private int ID;
+    private final int ID;
     private String division;
     private Timestamp createdDate;
     private String createdBy;

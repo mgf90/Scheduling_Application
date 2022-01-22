@@ -18,9 +18,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Optional;
@@ -33,6 +35,7 @@ public class MainMenuController implements Initializable {
     private static Appointment modAppt;
     private static int modApptInt;
     private static ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+    public static Boolean runApptCheck = true;
     public static ZonedDateTime startView;
     public static ZonedDateTime endView;
 
@@ -122,6 +125,37 @@ public class MainMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        if (runApptCheck) {
+            ObservableList<Appointment> allAppointments = Appointment.getAllAppointments();
+            runApptCheck = false;
+            int apptFound = 0;
+
+            for (Appointment appt : allAppointments) {
+                int minutesTil = (int) ChronoUnit.MINUTES.between(LocalDateTime.now(), appt.getStart());
+                String apptID = String.valueOf(appt.getID());
+
+                if (minutesTil > -1 && minutesTil < 16) {
+                    apptFound++;
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Appointment Upcoming");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Appointment #" + apptID + " is happening soon at " + appt.getStart());
+
+                    alert.showAndWait();
+                }
+
+
+            }
+
+            if (apptFound == 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Upcoming");
+                alert.setHeaderText(null);
+                alert.setContentText("No appointments within the next 15 minutes");
+                alert.showAndWait();
+            }
+        }
+
         custIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         custNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         custAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -180,7 +214,7 @@ public class MainMenuController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm");
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete " + deleteAppt.getTitle() + " from the system?");
+        alert.setContentText("Are you sure you want to delete " + deleteAppt.getTitle() + " from the system?\n\nAppointment ID: " + deleteAppt.getID() + "\n\nType: " + deleteAppt.getType());
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
@@ -191,7 +225,7 @@ public class MainMenuController implements Initializable {
             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
             alert2.setTitle("Delete Successful");
             alert2.setHeaderText(null);
-            alert2.setContentText(deleteAppt.getTitle() + " has been deleted from the system");
+            alert2.setContentText(deleteAppt.getTitle() + " has been deleted from the system\n\nAppointment ID: " + deleteAppt.getID() + "\n\nType: " + deleteAppt.getType());
 
             alert2.showAndWait();
         }

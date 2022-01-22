@@ -35,7 +35,7 @@ public class Report {
         String report = "";
 
         while (rs.next()) {
-            report += rs.getString(1) + " || Appt ID: " + rs.getString(2) + " || " + rs.getString(3) + " || " + rs.getString(4) + " || " + rs.getString(5) + " || " + rs.getString(6) + " - " + rs.getString(7) + " || Customer ID: " + rs.getString(8) + "\n\n";
+            report += rs.getString(1) + " || Appt ID: " + rs.getString(2) + " || " + rs.getString(3) + " || " + rs.getString(4) + " || " + rs.getString(5) + " || " + rs.getTimestamp(6) + " - " + rs.getTimestamp(7) + " || Customer ID: " + rs.getString(8) + "\n\n";
         }
 
         return report;

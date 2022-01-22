@@ -118,6 +118,7 @@ public class AddAppointmentController implements Initializable {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDate startDate = apptStartDate.getValue();
+        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
         String startHour = String.valueOf(apptStartHourCombo.getValue());
         if (apptStartHourCombo.getValue() < 10) {
@@ -132,8 +133,8 @@ public class AddAppointmentController implements Initializable {
         }
 
         LocalTime startTime = LocalTime.parse(startString, formatter);
-//            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
         LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        ZonedDateTime startZoned = start.atZone(localZone);
 //            ZonedDateTime startLocal = start.atZone(localZone);
 //            ZonedDateTime startUTC = startLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
@@ -151,6 +152,7 @@ public class AddAppointmentController implements Initializable {
 
         LocalTime endTime = LocalTime.parse(endString, formatter);
         LocalDateTime end = LocalDateTime.of(startDate, endTime);
+        ZonedDateTime endZoned = end.atZone(localZone);
 //            ZonedDateTime endLocal = end.atZone(localZone);
 //            ZonedDateTime endUTC = endLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
@@ -180,7 +182,7 @@ public class AddAppointmentController implements Initializable {
 
             alert.showAndWait();
 
-        } else if (!Appointment.withinBusinessHours(appt)) {
+        } else if (!Appointment.withinBusinessHours(startZoned, endZoned)) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

@@ -113,6 +113,7 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     void onCancel(ActionEvent event) throws IOException {
 
+        MainMenuController.runApptCheck = false;
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
         stage.setScene(new Scene(scene));
@@ -128,49 +129,51 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     void onSave(ActionEvent event) throws ParseException, SQLException, IOException {
 
-            int id = Integer.parseInt(apptIDTxt.getText());
-            String title = apptTitleTxt.getText();
-            String description = apptDescTxt.getText();
-            String location = apptLocTxt.getText();
-            String type = apptTypeTxt.getText();
+        int id = Integer.parseInt(apptIDTxt.getText());
+        String title = apptTitleTxt.getText();
+        String description = apptDescTxt.getText();
+        String location = apptLocTxt.getText();
+        String type = apptTypeTxt.getText();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalDate startDate = apptStartDate.getValue();
+        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDate startDate = apptStartDate.getValue();
 
-            String startHour = String.valueOf(apptStartHourCombo.getValue());
-            if (apptStartHourCombo.getValue() < 10) {
-                startHour = "0" + startHour;
-            }
-            String startMinute = String.valueOf(apptStartMinCombo.getValue());
-            String startString = startHour + ":" + startMinute + ":00";
-            if (apptStartMinCombo.getValue() == 0) {
-                startString = startHour + ":" + startMinute + "0:00";
-            }
+        String startHour = String.valueOf(apptStartHourCombo.getValue());
+        if (apptStartHourCombo.getValue() < 10) {
+            startHour = "0" + startHour;
+        }
+        String startMinute = String.valueOf(apptStartMinCombo.getValue());
+        String startString = startHour + ":" + startMinute + ":00";
+        if (apptStartMinCombo.getValue() == 0) {
+            startString = startHour + ":" + startMinute + "0:00";
+        }
 
 
 //            String startString = apptStartDate.getValue() + " " + apptStartHourCombo.getValue() + ":" + apptStartMinCombo.getValue() + ":00";
 //            String endString = apptStartDate.getValue() + " " + apptEndHourCombo.getValue() + ":" + apptEndMinCombo.getValue() + ":00";
 
-            LocalTime startTime = LocalTime.parse(startString, formatter);
-//            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        LocalTime startTime = LocalTime.parse(startString, formatter);
+        LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        ZonedDateTime startZoned = start.atZone(localZone);
 //            ZonedDateTime startLocal = start.atZone(localZone);
 //            ZonedDateTime startUTC = startLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
-            String endHour = String.valueOf(apptEndHourCombo.getValue());
-            if (apptEndHourCombo.getValue() < 10) {
-                endHour = "0" + endHour;
-            }
-            String endMinute = String.valueOf(apptEndMinCombo.getValue());
-            String endString = endHour + ":" + endMinute + ":00";
+        String endHour = String.valueOf(apptEndHourCombo.getValue());
+        if (apptEndHourCombo.getValue() < 10) {
+            endHour = "0" + endHour;
+        }
+        String endMinute = String.valueOf(apptEndMinCombo.getValue());
+        String endString = endHour + ":" + endMinute + ":00";
 
 
-            if (apptEndMinCombo.getValue() == 0) {
-                endString = endHour + ":" + endMinute + "0:00";
-            }
+        if (apptEndMinCombo.getValue() == 0) {
+            endString = endHour + ":" + endMinute + "0:00";
+        }
 
-            LocalTime endTime = LocalTime.parse(endString, formatter);
-            LocalDateTime end = LocalDateTime.of(startDate, endTime);
+        LocalTime endTime = LocalTime.parse(endString, formatter);
+        LocalDateTime end = LocalDateTime.of(startDate, endTime);
+        ZonedDateTime endZoned = end.atZone(localZone);
 //            ZonedDateTime endLocal = end.atZone(localZone);
 //            ZonedDateTime endUTC = endLocal.withZoneSameInstant(ZoneId.of("UTC"));
 
@@ -180,43 +183,44 @@ public class UpdateAppointmentController implements Initializable {
 //            ZonedDateTime end = ZonedDateTime.from(date2.toInstant());
 //            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.from(localEnd), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC+0"));
 
-            LocalDateTime createdDate = LocalDateTime.now(ZoneId.of("UTC"));
-            String createdBy = LoginScreenController.correctUser;
-            LocalDateTime lastUpdate = LocalDateTime.now(ZoneId.of("UTC"));
-            String updatedBy = LoginScreenController.correctUser;
-            int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
-            int userID = apptUserCombo.getSelectionModel().getSelectedItem().getID();
-            int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
+        LocalDateTime createdDate = LocalDateTime.now(ZoneId.of("UTC"));
+        String createdBy = LoginScreenController.correctUser;
+        LocalDateTime lastUpdate = LocalDateTime.now(ZoneId.of("UTC"));
+        String updatedBy = LoginScreenController.correctUser;
+        int custID = apptCustCombo.getSelectionModel().getSelectedItem().getID();
+        int userID = apptUserCombo.getSelectionModel().getSelectedItem().getID();
+        int contactID = apptContCombo.getSelectionModel().getSelectedItem().getID();
 
-            Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
+        Appointment appt = new Appointment(id, title, description, location, type, start, end, createdDate, createdBy, lastUpdate, updatedBy, custID, userID, contactID);
 
-            if (Appointment.invalidAppointment(appt)) {
+        if (Appointment.invalidAppointment(appt)) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Customer already has an appointment at this time");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Customer already has an appointment at this time");
 
-                alert.showAndWait();
+            alert.showAndWait();
 
-            } else if (!Appointment.withinBusinessHours(appt)) {
+        } else if (!Appointment.withinBusinessHours(startZoned, endZoned)) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please set your appointment between 8am and 10pm Eastern Time");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please set your appointment between 8am and 10pm Eastern Time");
 
-                alert.showAndWait();
+            alert.showAndWait();
 
-            } else {
-                Appointment.updateAppointment(appt);
-                Appointment.selectAppointments();
+        } else {
+            Appointment.updateAppointment(appt);
+            Appointment.selectAppointments();
+            MainMenuController.runApptCheck = false;
 
-                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
-                stage.setScene(new Scene(scene));
-                stage.show();
-                stage.centerOnScreen();
-            }
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
+            stage.setScene(new Scene(scene));
+            stage.show();
+            stage.centerOnScreen();
         }
     }
+}

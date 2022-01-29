@@ -10,21 +10,30 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="711.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReportsController">
+<AnchorPane prefHeight="711.0" prefWidth="908.0" style="-fx-background-color: #2a2e37; -fx-border-color: #d9d9d6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReportsController">
    <children>
-      <RadioButton fx:id="report1Radio" layoutX="60.0" layoutY="620.0" mnemonicParsing="false" selected="true" text="Report 1">
+      <RadioButton fx:id="report1Radio" layoutX="60.0" layoutY="620.0" mnemonicParsing="false" selected="true" text="Report 1" textFill="WHITE">
          <toggleGroup>
             <ToggleGroup fx:id="ReportToggle" />
          </toggleGroup>
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font>
       </RadioButton>
-      <RadioButton fx:id="report2Radio" layoutX="140.0" layoutY="620.0" mnemonicParsing="false" text="Report 2" toggleGroup="$ReportToggle" />
-      <RadioButton fx:id="report3Radio" layoutX="220.0" layoutY="620.0" mnemonicParsing="false" text="Report 3" toggleGroup="$ReportToggle" />
+      <RadioButton fx:id="report2Radio" layoutX="140.0" layoutY="620.0" mnemonicParsing="false" text="Report 2" textFill="WHITE" toggleGroup="$ReportToggle">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></RadioButton>
+      <RadioButton fx:id="report3Radio" layoutX="220.0" layoutY="620.0" mnemonicParsing="false" text="Report 3" textFill="WHITE" toggleGroup="$ReportToggle">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></RadioButton>
       <TextArea fx:id="reportTxt" layoutX="37.0" layoutY="62.0" prefHeight="511.0" prefWidth="835.0" />
       <Button layoutX="308.0" layoutY="616.0" mnemonicParsing="false" onAction="#runReport" prefHeight="25.0" prefWidth="56.0" text="Run" />
       <Button layoutX="641.0" layoutY="640.0" mnemonicParsing="false" onAction="#onBack" prefHeight="25.0" prefWidth="109.0" text="Back" />
-      <Label layoutX="424.0" layoutY="22.0" text="Reports">
+      <Label layoutX="424.0" layoutY="22.0" text="Reports" textFill="WHITE">
          <font>
-            <Font size="18.0" />
+            <Font name="Sitka Small" size="18.0" />
          </font>
       </Label>
       <TextField fx:id="infoTxt" layoutX="62.0" layoutY="652.0" prefHeight="25.0" prefWidth="375.0" />

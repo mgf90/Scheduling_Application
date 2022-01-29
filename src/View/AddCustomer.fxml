@@ -7,25 +7,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="354.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddCustomerController">
+<AnchorPane prefHeight="450.0" prefWidth="354.0" style="-fx-background-color: #2a2e37; -fx-border-color: #d9d9d6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddCustomerController">
    <children>
       <TextField fx:id="custNameTxt" layoutX="126.0" layoutY="60.0" />
       <TextField fx:id="custPhoneTxt" layoutX="126.0" layoutY="105.0" />
       <TextField fx:id="custAddressTxt" layoutX="126.0" layoutY="151.0" />
       <TextField fx:id="custZipTxt" layoutX="126.0" layoutY="200.0" />
-      <Label layoutX="54.0" layoutY="64.0" text="Name" />
-      <Label layoutX="54.0" layoutY="109.0" text="Phone" />
-      <Label layoutX="54.0" layoutY="155.0" text="Address" />
-      <Label layoutX="54.0" layoutY="204.0" text="Zip Code" />
+      <Label layoutX="54.0" layoutY="64.0" text="Name" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
+      <Label layoutX="54.0" layoutY="109.0" text="Phone" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
+      <Label layoutX="54.0" layoutY="155.0" text="Address" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
+      <Label layoutX="54.0" layoutY="204.0" text="Zip Code" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
       <ComboBox fx:id="custCountryCombo" layoutX="125.0" layoutY="250.0" onAction="#divisionList" prefWidth="150.0" />
       <ComboBox fx:id="custDivCombo" layoutX="126.0" layoutY="299.0" prefWidth="150.0" />
-      <Label layoutX="54.0" layoutY="254.0" text="Country" />
-      <Label layoutX="55.0" layoutY="303.0" text="Division" />
+      <Label layoutX="54.0" layoutY="254.0" text="Country" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
+      <Label layoutX="55.0" layoutY="303.0" text="Division" textFill="WHITE">
+         <font>
+            <Font name="Sitka Small" size="12.0" />
+         </font></Label>
       <Button fx:id="saveBtn" layoutX="86.0" layoutY="377.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
       <Button fx:id="cancelBtn" layoutX="201.0" layoutY="377.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
-      <Label layoutX="120.0" layoutY="14.0" text="Add Customer">
+      <Label layoutX="120.0" layoutY="14.0" text="Add Customer" textFill="WHITE">
          <font>
-            <Font size="18.0" />
+            <Font name="Sitka Small" size="18.0" />
          </font>
       </Label>
    </children>

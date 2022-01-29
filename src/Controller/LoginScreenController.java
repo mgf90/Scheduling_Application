@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Appointment;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +33,6 @@ public class LoginScreenController implements Initializable {
     public static String correctUser;
     private static int correctID;
     private static LocalDateTime logInTime;
-    private static ZonedDateTime loginZoned;
     private static ZonedDateTime loginUTC;
     Locale currentLocale = Locale.getDefault();
     ResourceBundle lang = ResourceBundle.getBundle("Language.Nat", currentLocale);
@@ -65,11 +63,6 @@ public class LoginScreenController implements Initializable {
         return logInTime;
     }
 
-    /** @return the correct ID */
-    public static int getCorrectID() {
-        return correctID;
-    }
-
     /** exits the program */
     @FXML
     void onExit(ActionEvent event) {
@@ -85,45 +78,11 @@ public class LoginScreenController implements Initializable {
     @FXML
     void onLogIn(ActionEvent event) throws IOException, SQLException {
 
-//        BufferedWriter bw = new BufferedWriter(fw);
-
-//        Boolean check = User.verifyUser(checkUser, checkPass);
-//
-//        if (check) {
-//            this.correctUser = checkUser;
-//
-//            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-//            Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
-//            stage.setScene(new Scene(scene));
-//            stage.show();
-//            stage.centerOnScreen();
-//        } else {
-//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//            alert.setTitle(lang.getString("Login"));
-//            alert.setHeaderText(null);
-//            alert.setContentText(lang.getString("LogInFail"));
-//
-//            alert.showAndWait();
-//        }
-
         try {
             checkUser = usernameTxt.getText();
             checkPass = passwordTxt.getText();
             logInTime = LocalDateTime.now();
-            loginZoned = logInTime.atZone(ZoneId.systemDefault());
-            loginUTC = loginZoned.withZoneSameInstant(ZoneId.of("UTC"));
-
-//            String path = "\\";
-            String fName = "login_activity.txt";
-
-            File f1 = new File(fName);
-            FileWriter fw;
-            if(!f1.exists()) {
-                f1.createNewFile();
-                fw = new FileWriter(f1);
-            } else {
-                fw = new FileWriter(f1, true);
-            }
+            loginUTC = logInTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
 
             if (checkUser != null && checkPass != null) {
                 String sql = "Select * from users Where User_Name='" + checkUser + "' and Password='" + checkUser + "'";
@@ -133,31 +92,13 @@ public class LoginScreenController implements Initializable {
                 if (rs.next()) {
                     this.correctUser = rs.getString("User_Name");
                     correctID = rs.getInt("User_ID");
-//                    logInTime = LocalDateTime.now();
-                    fw.write("User Name: " + correctUser + " || Date: " + loginUTC + " LOGIN SUCCESSFUL\n");
-                    fw.close();
+
+                    ZonedDateTime startUTC = logInTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+                    String start = logInTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                     LocalDateTime endView = logInTime.plusMinutes(15);
-
-                    String start = logInTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    ZonedDateTime endUTC = endView.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
                     String end = endView.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-                    Appointment.findAppointmentByStart(start, end, getCorrectID());
-                    if (Appointment.getAppointmentsSoon().size() > 0) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Appointment Upcoming");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Appointment #" + Appointment.getAppointmentsSoon().get(0).getID() + " is happening soon at " + Appointment.getAppointmentsSoon().get(0).getStart());
-
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Appointment Upcoming");
-                        alert.setHeaderText(null);
-                        alert.setContentText("No appointments within the next 15 minutes");
-
-                        alert.showAndWait();
-                    }
 
                     Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                     Parent scene = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainMenu.fxml")));
@@ -165,8 +106,6 @@ public class LoginScreenController implements Initializable {
                     stage.show();
                     stage.centerOnScreen();
                 } else {
-                    fw.write("User Name: " + checkUser + " || Date: " + loginUTC + " INVALID LOGIN ATTEMPT\n");
-                    fw.close();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(lang.getString("Login"));

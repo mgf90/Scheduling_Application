@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.*;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.TimeZone;
 
 public class Appointment {
@@ -219,6 +220,7 @@ public class Appointment {
         String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
         ps.setString(1, appt.getTitle());
         ps.setString(2, appt.getDescription());
         ps.setString(3, appt.getLocation());
@@ -253,19 +255,29 @@ public class Appointment {
         return rs.next();
     }
 
-    /** @param appt checks if appointment within business hours
+    /** @param start checks if appointment after start time
+     * @param end checks if appointment before end time
      * @return if within business hours*/
-    public static boolean withinBusinessHours(Appointment appt){
+    public static boolean withinBusinessHours(ZonedDateTime start, ZonedDateTime end){
 
-        ZonedDateTime start = appt.getStart().atZone(ZoneId.of("America/New_York"));
-        ZonedDateTime end = appt.getEnd().atZone(ZoneId.of("America/New_York"));
+        if (start.withZoneSameInstant(ZoneId.of("US/Eastern")).toLocalTime().isBefore(LocalTime.of(8, 0)) ||
+                start.withZoneSameInstant(ZoneId.of("US/Eastern")).toLocalTime().isAfter(LocalTime.of(22, 0)) ||
+                end.withZoneSameInstant(ZoneId.of("US/Eastern")).toLocalTime().isBefore(LocalTime.of(8, 0)) ||
+                end.withZoneSameInstant(ZoneId.of("US/Eastern")).toLocalTime().isAfter(LocalTime.of(22, 0))) {
+            return false;
+        }
 
-        ZonedDateTime open1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("America/New_York"));
-        ZonedDateTime open2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("America/New_York"));
-        ZonedDateTime close1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
-        ZonedDateTime close2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
+        return true;
 
-        return open1.isBefore(start) && open2.isBefore(end) && close1.isAfter(start)  && close2.isAfter(end);
+//        ZonedDateTime start = appt.getStart().atZone(ZoneId.of("UTC"));
+//        ZonedDateTime end = appt.getEnd().atZone(ZoneId.of("UTC"));
+//
+//        ZonedDateTime open1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("UTC"));
+//        ZonedDateTime open2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(7, 59), ZoneId.of("UTC"));
+//        ZonedDateTime close1 = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
+//        ZonedDateTime close2 = ZonedDateTime.of(end.toLocalDate(), LocalTime.of(22, 1), ZoneId.of("America/New_York"));
+//
+//        return open1.isBefore(start) && open2.isBefore(end) && close1.isAfter(start)  && close2.isAfter(end);
     }
 
     /** @throws SQLException displays SQL error

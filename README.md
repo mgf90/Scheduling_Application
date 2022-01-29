@@ -2,6 +2,12 @@
 
 This JavaFX application enables users to schedule, update, and delete appointments. It also lets them create, update, and delete customers and their associated appointments. All data is kept and updated within a MySQL database deployed with Heroku.
 
+### Built With
+  - [JavaFx](https://gluonhq.com/products/javafx/)
+  - [Scenebuilder](https://gluonhq.com/products/scene-builder/)
+  - [MySQL](https://www.mysql.com/)
+  - [Heroku](https://www.heroku.com/)
+
 ## Getting Started
 
 These instructions will give you a copy of the project up and running on
